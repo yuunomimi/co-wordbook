@@ -1,6 +1,6 @@
 import express, { Application } from 'express';
 import cors from 'cors';
-import productRoutes from './routes/product.routes';
+import wordbooksRoutes from './routes/wordbooks.routes';
 
 const app: Application = express();
 
@@ -9,6 +9,6 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json()); // JSONリクエストの解析
 
 // ルーティングの登録
-app.use('/api/products', productRoutes);
+app.use('/api/wordbooks', wordbooksRoutes);
 
 export default app;
