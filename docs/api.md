@@ -27,9 +27,9 @@ Response
 
 ---
 
-## 単語一覧取得
+## 単語帳一覧取得
 
-GET /api/words
+GET /api/wordbooks
 
 Response
 
@@ -37,8 +37,83 @@ Response
 [
   {
     "id": 1,
-    "english": "apple",
-    "japanese": "りんご"
+    "title": "Japanese-English",
+    "description": "和英単語帳",
+    "themeColor": "#DDDD55",
+    "ownerId": 3,
+    "createdAt": "2026-06-27T11:35:42.123Z",
+    "updatedAt": "2026-06-27T11:35:42.123Z",
+    "isPublic": false,
+    "isShared": false
   }
 ]
+//isSharedはwordbooksDBに格納しない
+```
+
+## 単語帳作成
+
+POST /api/wordbooks
+
+Request
+
+```json
+{
+  "title": "TOEIC",
+  "description": "トーイック",
+  "themeColor": "#00AAAA",
+}
+```
+
+Response
+
+```json
+{
+  "id": 2,
+  "title": "TOEIC",
+  "description": "トーイック",
+  "themeColor": "#00AAAA",
+  "ownerId": 1,
+  "createdAt": "2026-06-27T11:40:00.000Z",
+  "updatedAt": "2026-06-27T11:40:00.000Z"
+}
+```
+
+## 単語帳更新
+
+PATCH /api/wordbooks/:id
+
+Request
+
+```json
+{
+  "title": "TOEIC IP",
+  "themeColor": "#FFFFFF"
+}
+```
+
+Response
+
+```json
+{
+  "id": 2,
+  "title": "TOEIC IP",
+  "description": "トーイック",
+  "themeColor": "#FFFFFF",
+  "ownerId": 1,
+  "createdAt": "2026-06-27T11:40:00.000Z",
+  "updatedAt": "2026-06-27T11:40:00.000Z"
+}
+```
+
+## 単語帳削除
+
+DELETE /api/wordbooks/:id
+
+Response
+
+```json
+{
+  "id": 10,
+  "title": "TOEIC"
+}
 ```
