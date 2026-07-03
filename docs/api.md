@@ -1,6 +1,30 @@
 # API仕様
 
-## ログイン
+  ## サインイン
+POST /api/signin
+
+Request
+
+```json
+{
+  "email": "test@example.com",
+  "password": "password"
+}
+```
+
+Response
+
+```json
+{
+  "token": "xxxxx",
+  "user": {
+    "id": 1,
+    "name": "Taro"
+  }
+}
+```
+
+  ## ログイン
 
 POST /api/login
 
@@ -12,6 +36,21 @@ Request
   "password": "password"
 }
 ```
+
+Response
+
+```json
+{
+  "token": "xxxxx",
+  "user": {
+    "id": 1,
+    "name": "Taro"
+  }
+}
+```
+  ## ログアウト
+  
+POST /api/logout
 
 Response
 
@@ -116,4 +155,25 @@ Response
   "id": 10,
   "title": "TOEIC"
 }
+```
+
+## 単語一覧取得
+
+GET /api/wordbooks/:id/words
+
+Response
+
+```json
+[
+  {
+    "id": 1,
+    "title": "happy",
+    "discription": "幸せ"
+  },
+  {
+    "id": 2,
+    "title": "guilty",
+    "discription": "罪悪、有罪\n対義語はinocent"
+  }
+]
 ```
