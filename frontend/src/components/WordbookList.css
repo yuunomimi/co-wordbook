@@ -1,0 +1,23 @@
+.wordbook-list {
+  z-index: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px 64px;
+  padding: 24px 16px;
+}
+
+.wordbook-item.create-wordbook-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-lg);
+  border: 4px dashed var(--color-text3);
+  cursor: pointer;
+  color: var(--color-text3);
+}
+
+.wordbook-item.create-wordbook-item h3 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}

@@ -1,0 +1,107 @@
+.wordbook-item {
+  position: relative;
+  width: 280px;
+  height: 170px;
+  cursor: pointer;
+}
+
+.wordbook-item-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.wordbook-item-ring {
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 60px;
+  height: 60px;
+  z-index: -1;
+
+  transform: translateY(-50%) translateX(-50%);
+}
+
+.wordbook-item-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 65%;
+}
+
+.wordbook-item-content h3 {
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--color-text1);
+  line-height: 1.2;
+}
+
+.wordbook-item-content p {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-text2);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.wordbook-item-more-wrap {
+  position: absolute;
+  top: 16px;
+  right: 32px;
+}
+
+.wordbook-item-more {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  color: var(--color-text2);
+}
+
+.wordbook-item-more:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.wordbook-item-more-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+
+  width: 120px;
+  margin: 0;
+  padding: 8px;
+
+  list-style: none;
+  background: var(--color-bg1);
+  border: 1px solid var(--color-text3);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wordbook-item-more-menu li {
+  padding: 4px 12px;
+  border-radius: calc(var(--radius-md) - 4px);
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--color-text1);
+}
+
+.wordbook-item-more-menu li:hover {
+  background: var(--color-bg1-selected);
+}

@@ -1,0 +1,50 @@
+.wordbooklist-area {
+  width: 100%;
+  height: 100%;
+}
+
+.wordbooklist-area {
+  padding: 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: var(--color-bg2);
+}
+
+.search-bar {
+  position: relative;
+  width: 100%;
+  margin-inline: auto;
+  z-index: 1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--color-text2);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 16px 16px 16px 72px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-text3);
+  font-size: 16px;
+}
+
+.search-bar input::placeholder {
+  color: var(--color-text3);
+  font-size: 16px;
+}
+
+.search-bar input:focus {
+  outline: none;
+}
+
+.sort-menu {
+  z-index: 1;
+}
