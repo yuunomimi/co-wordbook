@@ -1,6 +1,31 @@
 # API仕様
 
-## ログイン
+  ## サインイン
+POST /api/signin
+
+Request
+
+```json
+{
+  "email": "test@example.com",
+  "password": "password",
+  "username": "username"
+}
+```
+
+Response
+
+```json
+{
+  "token": "xxxxx",
+  "user": {
+    "id": 1,
+    "name": "Taro"
+  }
+}
+```
+
+  ## ログイン
 
 POST /api/login
 
@@ -12,6 +37,21 @@ Request
   "password": "password"
 }
 ```
+
+Response
+
+```json
+{
+  "token": "xxxxx",
+  "user": {
+    "id": 1,
+    "name": "Taro"
+  }
+}
+```
+  ## ログアウト
+  
+POST /api/logout
 
 Response
 
@@ -115,5 +155,88 @@ Response
 {
   "id": 10,
   "title": "TOEIC"
+}
+```
+
+## 単語一覧取得
+
+GET /api/wordbooks/:id/words
+
+Response
+
+```json
+[
+  {
+    "id": 1,
+    "word": "happy",
+    "meaning": "幸せ"
+  },
+  {
+    "id": 2,
+    "word": "guilty",
+    "meaning": "罪悪、有罪\n対義語はinocent"
+  }
+]
+```
+
+## 単語の作成
+
+POST /api/wordbooks/:id/words/:id
+
+Request
+
+```json
+{
+  "id": 1,
+  "word": "happy",
+  "meaning": "幸せ"
+}
+```
+
+Response
+
+```json
+{
+  "id": 1,
+  "word": "happy",
+  "meaning": "幸せ"
+}
+```
+
+## 単語の編集
+
+PATCH /api/wordbooks/:id/words/:id
+
+Request
+
+```json
+{
+  "id": 1,
+  "word": "happy",
+  "meaning": "幸せ"
+}
+```
+
+Response
+
+```json
+{
+  "id": 1,
+  "word": "happy",
+  "meaning": "幸せ"
+}
+```
+
+## 単語の削除
+
+PATCH /api/wordbooks/:id/words/:id
+
+Response
+
+```json
+{
+  "id": 1,
+  "word": "happy",
+  "meaning": "幸せ"
 }
 ```
