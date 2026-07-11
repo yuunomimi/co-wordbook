@@ -1,0 +1,7 @@
+.wordbook-list {
+  z-index: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px 64px;
+  padding: 24px 16px;
+}

@@ -1,0 +1,33 @@
+[
+  {
+    "id": 1,
+    "title": "仮のwordbook",
+    "description": "テスト用の仮のWordbook",
+    "themeColor": "#F7D6D6",
+    "ownerId": 1,
+    "createdAt": "2024-06-01T12:00:00Z",
+    "updatedAt": "2024-06-01T12:00:00Z",
+    "isPublic": true
+  },
+  {
+    "id": 2,
+    "title": "プライベートwordbook",
+    "description": "非公開のWordbook",
+    "themeColor": "#DCEFD9",
+    "ownerId": 1,
+    "createdAt": "2024-06-02T12:00:00Z",
+    "updatedAt": "2024-06-02T12:00:00Z",
+    "isPublic": false
+  },
+  {
+    "id": 3,
+    "title": "公開wordbook",
+    "description": "公開されているWordbook",
+    "themeColor": "#DDEBFA",
+    "ownerId": 2,
+    "createdAt": "2024-06-03T12:00:00Z",
+    "updatedAt": "2024-06-03T12:00:00Z",
+    "isPublic": true
+  }
+
+]
