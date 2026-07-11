@@ -1,0 +1,12 @@
+.layout {
+  display: flex;
+}
+
+.sidebar {
+  flex-shrink: 0;
+}
+
+.content {
+  flex-grow: 1;
+  height: 100vh;
+}

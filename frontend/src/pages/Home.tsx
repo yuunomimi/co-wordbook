@@ -2,55 +2,59 @@ import type { Wordbook } from "../types/Wordbook";
 import { fetchWordbooks } from "../services/wordbooks";
 import WordbookList from "../components/WordbookList";
 import SortMenu from "../components/SortMenu";
-import { useState, useEffect } from "react";
-import { HomeIcon, MyBookIcon, SharedBookIcon, FriendsIcon, UserIcon, SearchIcon } from "../components/icons";
+import type { SortKey } from "../components/SortMenu";
+import { useState, useEffect, useMemo } from "react";
+import Sidebar, { type SidebarFilter } from "../components/Sidebar";
+import { SearchIcon } from "../components/icons";
+import { useSearchParams } from "react-router-dom";
 import './Home.css';
 
 function Home() {
   const [wordbooks, setWordbooks] = useState<Wordbook[]>([]);
+  const [sortKey, setSortKey] = useState<SortKey>("updated");
+
+  const [searchParams] = useSearchParams();
+  const sidebarFilter = (searchParams.get("filter") as SidebarFilter) || "home";
+
   useEffect(() => {
     fetchWordbooks().then(setWordbooks);
   }, []);
 
-  return (
-    <main className="home">
-      <div className="sidebar">
-        <h1>Co-WordBook</h1>
-        <ul className="sidebar-nav">
-          <li className="sidebar-item">
-            <HomeIcon width={32} height={32} />
-            ホーム
-          </li>
-          <li className="sidebar-item">
-            <MyBookIcon width={32} height={32} />
-            マイ単語帳
-          </li>
-          <li className="sidebar-item">
-            <SharedBookIcon width={32} height={32} />
-            共有単語帳
-          </li>
-        </ul>
-        <div className="sidebar-settings">
-          <div className="sidebar-item">
-            <FriendsIcon width={32} height={32} />
-            フレンド
-          </div>
-          <div className="sidebar-item">
-            <UserIcon width={32} height={32} />
-            設定
-          </div>
-        </div>
-      </div>
+  const visibleWordbooks = useMemo(() => {
+    const filteredWordbooks = wordbooks.filter((wordbook) => {
+      if (sidebarFilter === "my") {
+        return wordbook.isMine;
+      }
 
-      <div className="wordbooklist-area">
-        <div className="search-bar">
-          <SearchIcon className="search-icon" width={32} height={32} />
-          <input type="text" placeholder="単語帳を検索" />
-        </div>
-        <SortMenu />
-        <WordbookList wordbooks={wordbooks} />
+      if (sidebarFilter === "shared") {
+        return !wordbook.isMine && wordbook.isPublic;
+      }
+
+      return true;
+    });
+
+    return [...filteredWordbooks].sort((a, b) => {
+      if (sortKey === "name") {
+        return a.title.localeCompare(b.title, "ja");
+      }
+
+      if (sortKey === "created") {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+
+      return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+    });
+  }, [wordbooks, sidebarFilter, sortKey]);
+
+  return (
+    <div className="wordbooklist-area">
+      <div className="search-bar">
+        <SearchIcon className="search-icon" width={32} height={32} />
+        <input type="text" placeholder="単語帳を検索" />
       </div>
-    </main>
+      <SortMenu className="sort-menu" value={sortKey} onChange={setSortKey} />
+      <WordbookList wordbooks={visibleWordbooks} />
+    </div>
   );
 }
 

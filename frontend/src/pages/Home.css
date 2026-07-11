@@ -1,48 +1,6 @@
-.home {
-  display: flex;
-}
-
 .wordbooklist-area {
-  flex-grow: 1;
-}
-
-.sidebar {
-  position: sticky;
-  width: 325px;
-  height: 100vh;
-  background-color: var(--color-bg3);
-  color: var(--color-text2);
-  display: flex;
-  flex-direction: column;
-  padding: 16px 24px;
-  gap: 30px;
-  border-right: 1px solid var(--color-text3);
-}
-
-.sidebar-nav, .sidebar-settings {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.sidebar-settings {
-  margin-top: auto;
-}
-
-.sidebar h1 {
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--color-accent);
-  padding-inline: 12px;
-}
-
-.sidebar-item {
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 700;
-  padding: 12px;
-  gap: 20px;
+  width: 100%;
+  height: 100%;
 }
 
 .wordbooklist-area {
@@ -57,6 +15,7 @@
   position: relative;
   width: 100%;
   margin-inline: auto;
+  z-index: 1;
 }
 
 .search-icon {
@@ -84,4 +43,8 @@
 
 .search-bar input:focus {
   outline: none;
+}
+
+.sort-menu {
+  z-index: 1;
 }

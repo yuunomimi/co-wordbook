@@ -7,3 +7,5 @@ export { default as SearchIcon } from "./SearchIcon";
 export { default as ChevronDownIcon } from "./ChevronDownIcon";
 export { default as MoreIcon } from "./MoreIcon";
 export { default as ClockIcon } from "./ClockIcon";
+export { default as LockIcon } from "./LockIcon";
+export { default as PlusIcon } from "./PlusIcon";

@@ -2,14 +2,24 @@ import { useState, useRef, useEffect } from 'react'
 import './SortMenu.css'
 import { ChevronDownIcon } from './icons'
 
-export default function SortMenu() {
+export type SortKey = "updated" | "created" | "name";
+
+type SortMenuProps = {
+  className?: string;
+  value?: SortKey;
+  onChange?: (sort: SortKey) => void;
+};
+
+export default function SortMenu({ className, value, onChange }: SortMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const SORTS = [
+  const SORTS: { key: SortKey; label: string }[] = [
     { key: "updated", label: "更新日順" },
     { key: "created", label: "作成日順" },
     { key: "name", label: "名前順" },
   ]
-  const [sort, setSort] = useState(SORTS[0])
+  const [internalSort, setInternalSort] = useState<SortKey>(SORTS[0].key)
+  const selectedSort = value ?? internalSort
+  const selectedSortItem = SORTS.find((s) => s.key === selectedSort) ?? SORTS[0]
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -30,23 +40,26 @@ export default function SortMenu() {
   }, [])
 
   return (
-    <div className="sort-menu" ref={menuRef}>
+    <div className={`sort-menu ${className || ''}`} ref={menuRef}>
       <button
         className="sort-button"
         onClick={() => setIsOpen((prev) => !prev)}
       >
         <ChevronDownIcon width={24} height={24} />
-        {sort.label}
+        {selectedSortItem.label}
       </button>
 
       {isOpen && (
         <ul className="sort-menu-list">
           {SORTS.map((s) => (
             <li
-              className={s.key === sort.key ? "active" : ""}
+              className={s.key === selectedSort ? "active" : ""}
               key={s.key}
               onClick={() => {
-                setSort(s);
+                if (value === undefined) {
+                  setInternalSort(s.key);
+                }
+                onChange?.(s.key);
                 setIsOpen(false);
               }}
             >
