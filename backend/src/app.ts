@@ -12,8 +12,8 @@ app.use(express.json()); // JSONリクエストの解析
 
 // ルーティングの登録
 // verifyTokenを仲介すること
-//app.use('/api/wordbooks', verifyToken, wordbooksRoutes);
-app.use('/api/wordbooks', wordbooksRoutes);
+app.use('/api/wordbooks', verifyToken, wordbooksRoutes);
+//app.use('/api/wordbooks', wordbooksRoutes);
 app.use('/api/auth', authRoutes);
 
 export default app;
