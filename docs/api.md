@@ -173,7 +173,7 @@ Response
 
 ## 単語の作成
 
-POST /api/wordbooks/:id/words/:id
+POST /api/wordbooks/:id/words
 
 Request
 
