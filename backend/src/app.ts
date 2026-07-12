@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import wordbooksRoutes from './routes/wordbooks.routes';
 import authRoutes from './routes/auth.routes';
+import cookieParser from 'cookie-parser';
 import { verifyToken } from './middlewares/auth.middleware';
 
 const app: Application = express();
@@ -9,6 +10,7 @@ const app: Application = express();
 // フロントエンドからの通信を許可（CORS設定）
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(express.json()); // JSONリクエストの解析
+app.use(cookieParser()); // Cookieの解析
 
 // ルーティングの登録
 // verifyTokenを仲介すること
