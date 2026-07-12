@@ -7,33 +7,7 @@ Request
 
 ```json
 {
-  "email": "test@example.com",
-  "password": "password",
-  "username": "username"
-}
-```
-
-Response
-
-```json
-{
-  "token": "xxxxx",
-  "user": {
-    "id": 1,
-    "name": "Taro"
-  }
-}
-```
-
-  ## ログイン
-
-POST /api/login
-
-Request
-
-```json
-{
-  "email": "test@example.com",
+  "username": "username",
   "password": "password"
 }
 ```
@@ -42,16 +16,35 @@ Response
 
 ```json
 {
-  "token": "xxxxx",
-  "user": {
-    "id": 1,
-    "name": "Taro"
-  }
+  "username": "username",
+  "password": "password"
+}
+```
+
+  ## ログイン
+
+POST /api/auth/login
+
+Request
+
+```json
+{
+  "username": "username",
+  "password": "password"
+}
+```
+
+Response
+
+```json
+{
+  "username": "username",
+  "password": "password"
 }
 ```
   ## ログアウト
   
-POST /api/logout
+POST /api/auth/logout
 
 Response
 
@@ -116,6 +109,27 @@ Response
   "createdAt": "2026-06-27T11:40:00.000Z",
   "updatedAt": "2026-06-27T11:40:00.000Z"
 }
+```
+
+## 単語帳取得
+
+GET /api/wordbooks/:id
+
+Response
+
+```json
+{
+    "id": 1,
+    "title": "Japanese-English",
+    "description": "和英単語帳",
+    "themeColor": "#DDDD55",
+    "ownerId": 3,
+    "createdAt": "2026-06-27T11:35:42.123Z",
+    "updatedAt": "2026-06-27T11:35:42.123Z",
+    "isPublic": false,
+    "isShared": false
+}
+//isSharedはwordbooksDBに格納しない
 ```
 
 ## 単語帳更新
