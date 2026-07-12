@@ -195,6 +195,20 @@ Response
 }
 ```
 
+## 単語取得
+
+GET /api/wordbooks/:id/words/:id
+
+Response
+
+```json
+{
+  "id": 1,
+  "word": "happy",
+  "meaning": "幸せ"
+}
+```
+
 ## 単語の編集
 
 PATCH /api/wordbooks/:id/words/:id
@@ -221,7 +235,7 @@ Response
 
 ## 単語の削除
 
-PATCH /api/wordbooks/:id/words/:id
+DELETE /api/wordbooks/:id/words/:id
 
 Response
 
