@@ -27,10 +27,11 @@ export const createWordbook = (req: Request, res: Response): void => {
 
 // 単語帳取得 (GET)
 export const getWordbook = (req: Request, res: Response): void => {
-    const { id } = req.params;
-    const wbid = Array.isArray(id) ? id[0] : id;
+    const { wbid } = req.params;
+    console.log("wbid:", wbid); // デバッグ用にwbidをログ出力
+    const wordbookId = Array.isArray(wbid) ? wbid[0] : wbid;
 
-    const wordbook = mockWB.find(wb => wb.id === parseInt(wbid));
+    const wordbook = mockWB.find(wb => wb.id === parseInt(wordbookId));
     if (!wordbook) {
         res.status(404).json({ message: 'Wordbook not found' });
         return;
@@ -40,11 +41,11 @@ export const getWordbook = (req: Request, res: Response): void => {
 
 // 単語帳の更新（PATCH）
 export const updateWordbook = (req: Request, res: Response): void => {
-    const { id } = req.params;
-    const wbid = Array.isArray(id) ? id[0] : id;
+    const { wbid } = req.params;
+    const wordbookId = Array.isArray(wbid) ? wbid[0] : wbid;
     const { title, description, themeColor, isPublic, isShared } = req.body;
 
-    const wordbookIndex = mockWB.findIndex(wb => wb.id === parseInt(wbid));
+    const wordbookIndex = mockWB.findIndex(wb => wb.id === parseInt(wordbookId));
     if (wordbookIndex === -1) {
         res.status(404).json({ message: 'Wordbook not found' });
         return;
@@ -66,17 +67,17 @@ export const updateWordbook = (req: Request, res: Response): void => {
 
 // 単語帳の削除（DELETE）
 export const deleteWordbook = (req: Request, res: Response): void => {
-    const { id } = req.params;
-    console.log("id:", id); // デバッグ用にidをログ出力
-    const wbid = Array.isArray(id) ? id[0] : id;
+    const { wbid } = req.params;
+    console.log("wbid:", wbid); // デバッグ用にwbidをログ出力
+    const wordbookId = Array.isArray(wbid) ? wbid[0] : wbid;
 
-    const wordbookIndex = mockWB.findIndex(wb => wb.id === parseInt(wbid));
+    const wordbookIndex = mockWB.findIndex(wb => wb.id === parseInt(wordbookId));
     if (wordbookIndex === -1) {
         res.status(404).json({ message: 'Wordbook not found' });
         return;
     }
     mockWB.splice(wordbookIndex, 1);
-    res.status(200).json({ "id": parseInt(wbid), "title": mockWB[wordbookIndex].title });
+    res.status(200).json({ "id": parseInt(wordbookId), "title": mockWB[wordbookIndex].title });
 }
 
 // モックデータ（DBの代わり）

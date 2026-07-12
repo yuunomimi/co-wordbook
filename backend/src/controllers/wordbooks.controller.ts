@@ -68,8 +68,8 @@ export const createWordbook = async (req: Request, res: Response): Promise<void>
 // 単語帳取得 (GET)
 export const getWordbook = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { id } = req.params;
-        const wbid = parseInt(Array.isArray(id) ? id[0] : id, 10);
+        const { wbid } = req.params;
+        const wordbookId = parseInt(Array.isArray(wbid) ? wbid[0] : wbid, 10);
 
         const query = `
             SELECT 
@@ -83,7 +83,7 @@ export const getWordbook = async (req: Request, res: Response): Promise<void> =>
             FROM wordbooks
             WHERE id = $1
         `;
-        const result = await pool.query(query, [wbid]);
+        const result = await pool.query(query, [wordbookId]);
 
         if (result.rowCount === 0) {
             res.status(404).json({ message: 'Wordbook not found' });
@@ -99,8 +99,8 @@ export const getWordbook = async (req: Request, res: Response): Promise<void> =>
 // 単語帳の更新（PATCH）
 export const updateWordbook = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { id } = req.params;
-        const wbid = parseInt(Array.isArray(id) ? id[0] : id, 10);
+        const { wbid } = req.params;
+        const wordbookId = parseInt(Array.isArray(wbid) ? wbid[0] : wbid, 10);
         const { title, description, themeColor, isPublic, isShared } = req.body;
 
         // COALESCE を使うことで、送られてこなかった値(null)は更新せず、既存の値を維持します
@@ -131,7 +131,7 @@ export const updateWordbook = async (req: Request, res: Response): Promise<void>
             themeColor !== undefined ? themeColor : null,
             isPublic !== undefined ? isPublic : null,
             isShared !== undefined ? isShared : null,
-            wbid
+            wordbookId
         ];
 
         const result = await pool.query(query, values);
@@ -151,15 +151,15 @@ export const updateWordbook = async (req: Request, res: Response): Promise<void>
 // 単語帳の削除（DELETE）
 export const deleteWordbook = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { id } = req.params;
-        const wbid = parseInt(Array.isArray(id) ? id[0] : id, 10);
+        const { wbid } = req.params;
+        const wordbookId = parseInt(Array.isArray(wbid) ? wbid[0] : wbid, 10);
 
         const query = `
             DELETE FROM wordbooks 
             WHERE id = $1 
             RETURNING id, title
         `;
-        const result = await pool.query(query, [wbid]);
+        const result = await pool.query(query, [wordbookId]);
 
         if (result.rowCount === 0) {
             res.status(404).json({ message: 'Wordbook not found' });
