@@ -41,6 +41,7 @@ body {
   line-height: 1.5;
   text-rendering: optimizeLegibility;
   color: var(--color-text1);
+  background-color: var(--color-bg2);
 }
 
 img,

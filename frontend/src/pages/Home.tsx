@@ -4,9 +4,9 @@ import WordbookList from "../components/WordbookList";
 import SortMenu from "../components/SortMenu";
 import type { SortKey } from "../components/SortMenu";
 import { useState, useEffect, useMemo } from "react";
-import Sidebar, { type SidebarFilter } from "../components/Sidebar";
-import { SearchIcon } from "../components/icons";
+import { type SidebarFilter } from "../components/Sidebar";
 import { useSearchParams } from "react-router-dom";
+import { Search } from "lucide-react";
 import './Home.css';
 
 function Home() {
@@ -49,7 +49,7 @@ function Home() {
   return (
     <div className="wordbooklist-area">
       <div className="search-bar">
-        <SearchIcon className="search-icon" width={32} height={32} />
+        <Search className="search-icon" width={32} height={32} />
         <input type="text" placeholder="単語帳を検索" />
       </div>
       <SortMenu className="sort-menu" value={sortKey} onChange={setSortKey} />
