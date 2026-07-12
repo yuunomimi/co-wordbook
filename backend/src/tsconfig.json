@@ -1,9 +1,0 @@
-{
-    "compilerOptions": {
-        // 他の設定...
-        "typeRoots": [
-            "./node_modules/@types",
-            "./types" // 先ほど作成したフォルダを追加
-        ]
-    }
-}
