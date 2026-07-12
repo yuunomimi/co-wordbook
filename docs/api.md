@@ -1,26 +1,5 @@
 # API仕様
 
-  ## サインイン
-POST /api/signin
-
-Request
-
-```json
-{
-  "username": "username",
-  "password": "password"
-}
-```
-
-Response
-
-```json
-{
-  "username": "username",
-  "password": "password"
-}
-```
-
   ## ログイン
 
 POST /api/auth/login
@@ -38,8 +17,7 @@ Response
 
 ```json
 {
-  "username": "username",
-  "password": "password"
+  "username": "username"
 }
 ```
   ## ログアウト

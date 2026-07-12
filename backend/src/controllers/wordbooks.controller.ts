@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import pool from '../db'; // データベース接続設定（後述）
+import pool from '../db';
 
 // 単語帳一覧取得 (GET)
 export const getWordbooks = async (req: Request, res: Response): Promise<void> => {
@@ -7,15 +7,15 @@ export const getWordbooks = async (req: Request, res: Response): Promise<void> =
         const userId = (req.user as { id: number }).id;
 
         const query = `
-            SELECT 
-                id, title, description, 
-                theme_color AS "themeColor", 
-                owner_id AS "ownerId", 
-                created_at AS "createdAt", 
-                updated_at AS "updatedAt", 
-                is_public AS "isPublic", 
+            SELECT
+                id, title, description,
+                theme_color AS "themeColor",
+                owner_id AS "ownerId",
+                created_at AS "createdAt",
+                updated_at AS "updatedAt",
+                is_public AS "isPublic",
                 is_shared AS "isShared"
-            FROM wordbooks 
+            FROM wordbooks
             WHERE owner_id = $1
             ORDER BY created_at DESC
         `;
@@ -38,13 +38,13 @@ export const createWordbook = async (req: Request, res: Response): Promise<void>
         const query = `
             INSERT INTO wordbooks (title, description, theme_color, owner_id, is_public, is_shared)
             VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING 
-                id, title, description, 
-                theme_color AS "themeColor", 
-                owner_id AS "ownerId", 
-                created_at AS "createdAt", 
-                updated_at AS "updatedAt", 
-                is_public AS "isPublic", 
+            RETURNING
+                id, title, description,
+                theme_color AS "themeColor",
+                owner_id AS "ownerId",
+                created_at AS "createdAt",
+                updated_at AS "updatedAt",
+                is_public AS "isPublic",
                 is_shared AS "isShared"
         `;
 

@@ -1,10 +1,13 @@
 import { Router } from 'express';
-import { login, logout, signin } from '../controllers/auth.controller';
+import * as realController from '../controllers/auth.controller';
+import * as mockController from '../controllers/auth.mock.controller';
+
+const isMock = process.env.USE_MOCK === 'true' || false; // デフォルトはfalseに設定
+const controller = isMock ? mockController : realController;
+const { login, logout } = controller;
+
 
 const router = Router();
-
-// POST /api/signin
-router.post('/signin', signin);
 
 // POST /api/login
 router.post('/login', login);
