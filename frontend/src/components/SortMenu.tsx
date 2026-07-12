@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import './SortMenu.css'
-import { ChevronDownIcon } from './icons'
+import { ChevronDown } from 'lucide-react'
 
 export type SortKey = "updated" | "created" | "name";
 
@@ -11,15 +11,15 @@ type SortMenuProps = {
 };
 
 export default function SortMenu({ className, value, onChange }: SortMenuProps) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const SORTS: { key: SortKey; label: string }[] = [
     { key: "updated", label: "更新日順" },
     { key: "created", label: "作成日順" },
     { key: "name", label: "名前順" },
   ]
   const [internalSort, setInternalSort] = useState<SortKey>(SORTS[0].key)
-  const selectedSort = value ?? internalSort
-  const selectedSortItem = SORTS.find((s) => s.key === selectedSort) ?? SORTS[0]
+  const selectedSort: SortKey = value ?? internalSort
+  const selectedSortItem: { key: SortKey; label: string } = SORTS.find((s) => s.key === selectedSort) ?? SORTS[0]
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function SortMenu({ className, value, onChange }: SortMenuProps) 
         className="sort-button"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <ChevronDownIcon width={24} height={24} />
+        <ChevronDown width={24} height={24} />
         {selectedSortItem.label}
       </button>
 

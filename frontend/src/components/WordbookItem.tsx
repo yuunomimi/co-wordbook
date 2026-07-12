@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import type { Wordbook } from "../types/Wordbook";
 import CardBackground from "./CardBackground";
 import CardRing from "./CardRing";
-import { ClockIcon, MoreIcon } from "./icons";
+import { Clock3, Ellipsis } from "lucide-react";
 import "./WordbookItem.css";
 import { useNavigate } from "react-router-dom";
 
 function WordbookItem({ wordbook }: { wordbook: Wordbook }) {
-  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState<boolean>(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ function WordbookItem({ wordbook }: { wordbook: Wordbook }) {
         <h3>{wordbook.title}</h3>
         <p>作成者：{wordbook.isMine ? "自分" : "他のユーザー"}</p>
         <p>
-          <ClockIcon width={16} height={16} />
+          <Clock3 width={16} height={16} />
           {new Date(wordbook.updatedAt).toLocaleDateString("ja-JP", {
             year: "numeric",
             month: "2-digit",
@@ -48,14 +48,17 @@ function WordbookItem({ wordbook }: { wordbook: Wordbook }) {
       <div className="wordbook-item-more-wrap" ref={moreMenuRef}>
         <button
           className="wordbook-item-more"
-          onClick={() => setIsMoreOpen((prev) => !prev)}
+          onClick={(event) => {
+            event.stopPropagation();
+            setIsMoreOpen((prev) => !prev);
+          }}
           aria-label="単語帳メニュー"
         >
-          <MoreIcon width={24} height={24} />
+          <Ellipsis width={24} height={24} />
         </button>
 
         {isMoreOpen && (
-          <ul className="wordbook-item-more-menu">
+          <ul className="wordbook-item-more-menu" onClick={(event) => event.stopPropagation()}>
             {moreActions.map((action) => (
               <li key={action}>{action}</li>
             ))}
