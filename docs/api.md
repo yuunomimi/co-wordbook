@@ -256,3 +256,47 @@ Response
 }
 ```
 
+## 単語帳ユーザー一覧取得
+GET    /api/wordbooks/:id/collaborators            # 共同編集者一覧取得
+
+Response
+
+```json
+[
+  {
+    "id": 3,
+    "name": "Hanako"
+  },
+  {
+    "id": 3,
+    "name": "Taro"
+  }
+]
+```
+
+POST   /api/wordbooks/:id/collaborators            # 共同編集者追加
+
+Request
+```json
+{
+  "username": "Taro"
+}
+```
+
+Response
+
+```json
+{
+  "id": 3,
+  "name": "Hanako"
+}
+```
+
+DELETE /api/wordbooks/:id/collaborators/:username    # 共同編集者削除
+
+```json
+{
+  "id": 3,
+  "name": "Hanako"
+}
+```
