@@ -69,6 +69,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
         // 4. レスポンスを返す
         return res.json({
+            id: user.id,
             username: user.username
         });
 
@@ -89,3 +90,17 @@ export const logout = async (req: Request, res: Response): Promise<any> => {
     });
     return res.json({ message: 'ログアウトしました' });
 };
+
+// 認証済みユーザー情報の取得 (GET)
+export const getMe = async (req: Request, res: Response): Promise<any> => {
+    // req.userはverifyTokenミドルウェアで設定される
+    const user = req.user as { id: number; username: string } | undefined;
+    if (!user) {
+        return res.status(401).json({ message: '認証が必要です' });
+    }
+
+    return res.json({
+        id: user.id,
+        username: user.username
+    });
+}
