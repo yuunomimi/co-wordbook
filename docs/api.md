@@ -17,7 +17,8 @@ Response
 
 ```json
 {
-  "username": "username"
+  "id": "mojiretsu",
+  "username": "Taro"
 }
 ```
   ## ログアウト
@@ -28,11 +29,19 @@ Response
 
 ```json
 {
-  "token": "xxxxx",
-  "user": {
-    "id": 1,
-    "name": "Taro"
-  }
+  "id": "mojiretsu",
+  "username": "Taro"
+}
+```
+
+## getMe
+
+GET /api/auth/me
+
+```json
+{
+  "id": "mojiretsu",
+  "username": "Taro"
 }
 ```
 
