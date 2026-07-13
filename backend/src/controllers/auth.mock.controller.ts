@@ -64,7 +64,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     res.cookie('auth_token', token, {
         httpOnly: true, // JavaScriptからのアクセスを禁止（XSS対策）
         secure: process.env.NODE_ENV === 'production', // 本番環境(HTTPS)でのみ送信
-        sameSite: 'strict', // CSRF対策
+        sameSite: 'none', // CSRF対策
         maxAge: 24 * 60 * 60 * 1000 // 1日
     });
 
@@ -80,7 +80,7 @@ export const logout = async (req: Request, res: Response): Promise<any> => {
     res.clearCookie('auth_token', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: 'none',
     });
     return res.json({ message: 'ログアウトしました' });
 };
