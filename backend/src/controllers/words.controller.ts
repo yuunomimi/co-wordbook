@@ -25,17 +25,16 @@ export const getWords = async (req: Request, res: Response): Promise<void> => {
 // 単語の作成 (POST)
 export const createWord = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { wbid, wid } = req.params;
+        const { wbid } = req.params;
         const wordbookId = parseInt(Array.isArray(wbid) ? wbid[0] : wbid, 10);
-        const wordId = parseInt(Array.isArray(wid) ? wid[0] : wid, 10);
         const { word, meaning } = req.body;
 
         const query = `
-            INSERT INTO words (id, wordbook_id, word, meaning)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO words (wordbook_id, word, meaning)
+            VALUES ($1, $2, $3)
             RETURNING id, word, meaning
         `;
-        const result = await pool.query(query, [wordId, wordbookId, word, meaning]);
+        const result = await pool.query(query, [wordbookId, word, meaning]);
 
         res.status(201).json(result.rows[0]);
     } catch (error) {

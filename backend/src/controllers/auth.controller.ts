@@ -58,13 +58,14 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             { expiresIn: '1d' } // 有効期限：1日
         );
 
-        // 3. HttpOnlyクッキーにセット
-        res.cookie('auth_token', token, {
-            httpOnly: true, // JavaScriptからのアクセスを禁止（XSS対策）
-            secure: process.env.NODE_ENV === 'production', // 本番環境(HTTPS)でのみ送信
-            sameSite: 'strict', // CSRF対策
-            maxAge: 24 * 60 * 60 * 1000 // 1日
-        });
+            //TODO sameSiteの設定をあとで検討
+            // 3. HttpOnlyクッキーにセット
+            res.cookie('auth_token', token, {
+                httpOnly: true, // JavaScriptからのアクセスを禁止（XSS対策）
+                secure: process.env.NODE_ENV === 'production', // 本番環境(HTTPS)でのみ送信
+                sameSite: 'none',
+                maxAge: 24 * 60 * 60 * 1000 // 1日
+            });
 
         // 4. レスポンスを返す
         return res.json({
@@ -80,10 +81,11 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 // ログアウト (POST)
 export const logout = async (req: Request, res: Response): Promise<any> => {
     // クッキーをクリア
+    //TODO sameSiteの設定をあとで検討
     res.clearCookie('auth_token', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: 'none',
     });
     return res.json({ message: 'ログアウトしました' });
 };

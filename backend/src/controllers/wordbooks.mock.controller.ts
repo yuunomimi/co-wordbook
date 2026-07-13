@@ -28,7 +28,6 @@ export const createWordbook = (req: Request, res: Response): void => {
 // 単語帳取得 (GET)
 export const getWordbook = (req: Request, res: Response): void => {
     const { wbid } = req.params;
-    console.log("wbid:", wbid); // デバッグ用にwbidをログ出力
     const wordbookId = Array.isArray(wbid) ? wbid[0] : wbid;
 
     const wordbook = mockWB.find(wb => wb.id === parseInt(wordbookId));
@@ -68,7 +67,6 @@ export const updateWordbook = (req: Request, res: Response): void => {
 // 単語帳の削除（DELETE）
 export const deleteWordbook = (req: Request, res: Response): void => {
     const { wbid } = req.params;
-    console.log("wbid:", wbid); // デバッグ用にwbidをログ出力
     const wordbookId = Array.isArray(wbid) ? wbid[0] : wbid;
 
     const wordbookIndex = mockWB.findIndex(wb => wb.id === parseInt(wordbookId));
