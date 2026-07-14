@@ -14,7 +14,7 @@ export const getCollaborators = async (req: Request, res: Response): Promise<voi
               AND (
                 wb.owner_id = $2
                 OR EXISTS (
-                    SELECT 1 FROM collaborators c 
+                    SELECT 1 FROM collaborators c
                     WHERE c.wordbook_id = wb.id AND c.user_id = $2
                 )
               )
@@ -42,7 +42,6 @@ export const getCollaborators = async (req: Request, res: Response): Promise<voi
 };
 
 // 共同編集者追加 (POST /api/wordbooks/:wbid/users)
-// ユーザー名（username）で追加処理を行います
 export const addCollaborator = async (req: Request, res: Response): Promise<void> => {
     try {
         const { wbid } = req.params;
@@ -50,7 +49,7 @@ export const addCollaborator = async (req: Request, res: Response): Promise<void
         const { username } = req.body; // bodyから username を受け取る
         const currentUserId = (req.user as { id: string }).id;
 
-        // 1. リクエストしたユーザーが「単語帳のオーナー」であるかチェック
+        // リクエストしたユーザーが「単語帳のオーナー」であるかチェック
         const ownerCheck = await pool.query(`
             SELECT owner_id FROM wordbooks
             WHERE id = $1 AND owner_id = $2
@@ -61,7 +60,6 @@ export const addCollaborator = async (req: Request, res: Response): Promise<void
             return;
         }
 
-        // 2. ユーザー名から該当するユーザーのID（UUID）を引く
         const userResult = await pool.query(`
             SELECT id FROM users WHERE username = $1
         `, [username]);
@@ -72,15 +70,15 @@ export const addCollaborator = async (req: Request, res: Response): Promise<void
         }
         const targetUserId = userResult.rows[0].id;
 
-        // 3. 【バリデーション】オーナー自身を追加しようとしていないか
+        // オーナー自身を追加しようとしていないか
         if (targetUserId === currentUserId) {
             res.status(400).json({ message: 'Cannot add yourself as a collaborator' });
             return;
         }
 
-        // 4. 【バリデーション】既に共同編集者として登録されていないか
+        // 既に共同編集者として登録されていないか
         const existCheck = await pool.query(`
-            SELECT 1 FROM collaborators 
+            SELECT 1 FROM collaborators
             WHERE wordbook_id = $1 AND user_id = $2
         `, [wordbookId, targetUserId]);
 
@@ -101,7 +99,6 @@ export const addCollaborator = async (req: Request, res: Response): Promise<void
             VALUES ($1, $2)
         `, [wordbookId, targetUserId]);
 
-        // 【修正】is_shared カラムの UPDATE 処理（SET is_shared = true）を削除しました
 
         res.status(201).json({ message: 'Collaborator added successfully' });
     } catch (error) {
@@ -113,19 +110,16 @@ export const addCollaborator = async (req: Request, res: Response): Promise<void
     }
 };
 
-// 共同編集者削除 (DELETE /api/wordbooks/:wbid/users/:username)
-// パスパラメータ :username の位置に「ユーザー名」が渡される想定で処理します
+// 共同編集者削除 (DELETE /api/wordbooks/:wbid/users/:userId)
 export const removeCollaborator = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { wbid, username } = req.params;
-        console.error(username);
+        const { wbid, userId } = req.params;
         const wordbookId = parseInt(Array.isArray(wbid) ? wbid[0] : wbid, 10);
-        const targetUsername = username; // パラメータの username を使用
         const currentUserId = (req.user as { id: string }).id;
 
-        // 1. リクエストしたユーザーが「単語帳のオーナー」であるかチェック
+        // リクエストしたユーザーが「単語帳のオーナー」であるかチェック
         const ownerCheck = await pool.query(`
-            SELECT owner_id FROM wordbooks 
+            SELECT owner_id FROM wordbooks
             WHERE id = $1 AND owner_id = $2
         `, [wordbookId, currentUserId]);
 
@@ -133,35 +127,24 @@ export const removeCollaborator = async (req: Request, res: Response): Promise<v
             res.status(404).json({ message: 'Wordbook not found' });
             return;
         }
-        console.error(targetUsername);
-        // 2. ユーザー名からIDを引いて、該当の共同編集者を削除
-        const user = await pool.query(`
-            SELECT id FROM users WHERE username = $1
-        `, [targetUsername]);
 
-        if (user.rowCount === 0) {
-            res.status(404).json({ message: "User not found" });
-            return;
-        }
 
         const result = await pool.query(`
             DELETE FROM collaborators
             WHERE wordbook_id = $1
               AND user_id = $2
             RETURNING *
-        `, [wordbookId, user.rows[0].id]);
+        `, [wordbookId, userId]);
 
         if (result.rowCount === 0) {
             res.status(404).json({ message: 'Collaborator not found' });
             return;
         }
 
-        // 【修正】残り共同編集者数のカウント、および wordbooks の UPDATE 処理（SET is_shared = false）を丸ごと削除しました
-
         res.status(200).json({ message: 'Collaborator removed successfully' });
     } catch (error) {
         console.error('Error removing collaborator:', error);
-        res.status(500).json({ 
+        res.status(500).json({
             message: 'Internal server error',
             error: error instanceof Error ? error.message : String(error)
         });
