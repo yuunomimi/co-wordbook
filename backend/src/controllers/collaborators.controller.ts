@@ -42,7 +42,7 @@ export const getCollaborators = async (req: Request, res: Response): Promise<voi
 };
 
 // 共同編集者追加 (POST /api/wordbooks/:wbid/users)
-// 【変更】ユーザー名（username）で追加処理を行います
+// ユーザー名（username）で追加処理を行います
 export const addCollaborator = async (req: Request, res: Response): Promise<void> => {
     try {
         const { wbid } = req.params;
@@ -101,25 +101,24 @@ export const addCollaborator = async (req: Request, res: Response): Promise<void
             VALUES ($1, $2)
         `, [wordbookId, targetUserId]);
 
-        await pool.query(`
-            UPDATE wordbooks SET is_shared = true WHERE id = $1
-        `, [wordbookId]);
+        // 【修正】is_shared カラムの UPDATE 処理（SET is_shared = true）を削除しました
 
         res.status(201).json({ message: 'Collaborator added successfully' });
     } catch (error) {
         console.error('Error adding collaborator:', error);
         res.status(500).json({ 
-        message: 'Internal server error',
-        error: error instanceof Error ? error.message : String(error)
-    });
+            message: 'Internal server error',
+            error: error instanceof Error ? error.message : String(error)
+        });
     }
 };
 
-// 共同編集者削除 (DELETE /api/wordbooks/:wbid/users/:uid)
-// 【変更】パスパラメータ :uid の位置に「ユーザー名」が渡される想定で処理します
+// 共同編集者削除 (DELETE /api/wordbooks/:wbid/users/:username)
+// パスパラメータ :username の位置に「ユーザー名」が渡される想定で処理します
 export const removeCollaborator = async (req: Request, res: Response): Promise<void> => {
     try {
         const { wbid, username } = req.params;
+        console.error(username);
         const wordbookId = parseInt(Array.isArray(wbid) ? wbid[0] : wbid, 10);
         const targetUsername = username; // パラメータの username を使用
         const currentUserId = (req.user as { id: string }).id;
@@ -134,38 +133,37 @@ export const removeCollaborator = async (req: Request, res: Response): Promise<v
             res.status(404).json({ message: 'Wordbook not found' });
             return;
         }
+        console.error(targetUsername);
+        // 2. ユーザー名からIDを引いて、該当の共同編集者を削除
+        const user = await pool.query(`
+            SELECT id FROM users WHERE username = $1
+        `, [targetUsername]);
 
-        // 2. PostgreSQL の USING 句を使い、users テーブルと結合して「ユーザー名」で直接削除
+        if (user.rowCount === 0) {
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+
         const result = await pool.query(`
-            DELETE FROM collaborators c
-            USING users u
-            WHERE c.user_id = u.id
-              AND c.wordbook_id = $1
-              AND u.username = $2
-        `, [wordbookId, targetUsername]);
+            DELETE FROM collaborators
+            WHERE wordbook_id = $1
+              AND user_id = $2
+            RETURNING *
+        `, [wordbookId, user.rows[0].id]);
 
         if (result.rowCount === 0) {
             res.status(404).json({ message: 'Collaborator not found' });
             return;
         }
 
-        // 3. 共同編集者がゼロになったら、is_shared フラグを false に戻す
-        const remainingCheck = await pool.query(`
-            SELECT 1 FROM collaborators WHERE wordbook_id = $1 LIMIT 1
-        `, [wordbookId]);
-
-        if (remainingCheck.rowCount === 0) {
-            await pool.query(`
-                UPDATE wordbooks SET is_shared = false WHERE id = $1
-            `, [wordbookId]);
-        }
+        // 【修正】残り共同編集者数のカウント、および wordbooks の UPDATE 処理（SET is_shared = false）を丸ごと削除しました
 
         res.status(200).json({ message: 'Collaborator removed successfully' });
     } catch (error) {
         console.error('Error removing collaborator:', error);
         res.status(500).json({ 
-        message: 'Internal server error',
-        error: error instanceof Error ? error.message : String(error)
-    });
+            message: 'Internal server error',
+            error: error instanceof Error ? error.message : String(error)
+        });
     }
 };

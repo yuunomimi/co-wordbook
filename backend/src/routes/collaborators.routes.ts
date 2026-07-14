@@ -9,7 +9,7 @@ router.get('/', getCollaborators);
 // POST /api/wordbooks/:wbid/users
 router.post('/', addCollaborator);
 
-// DELETE /api/wordbooks/:wbid/users/:uid
-router.delete('/:uid', removeCollaborator);
+// DELETE /api/wordbooks/:wbid/users/:username
+router.delete('/:username', removeCollaborator);
 
 export default router;

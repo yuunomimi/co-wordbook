@@ -193,6 +193,7 @@ Request
   "meaning": "幸せ"
 }
 ```
+//リクエスト時、自動でMemorablesテーブルのMemorable=falseで単語IDとともに追加する
 
 Response
 
@@ -300,3 +301,7 @@ DELETE /api/wordbooks/:id/collaborators/:username    # 共同編集者削除
   "name": "Hanako"
 }
 ```
+
+## 覚えているかのBoolean取得
+
+GET /api/wordbooks/:id/words/:id
