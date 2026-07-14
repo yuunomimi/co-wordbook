@@ -3,3 +3,8 @@ export type Word = {
   word: string;
   meaning: string;
 }
+
+export type NewWord = {
+  word: string;
+  meaning: string;
+}

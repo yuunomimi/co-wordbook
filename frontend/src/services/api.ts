@@ -1,4 +1,4 @@
-// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export class UnauthorizedError extends Error {
   constructor() {
@@ -11,7 +11,7 @@ export async function apiFetch(
   input: string,
   init?: RequestInit
 ): Promise<Response> {
-  const response = await fetch(`${input}`, {
+  const response = await fetch(`${API_URL}${input}`, {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",

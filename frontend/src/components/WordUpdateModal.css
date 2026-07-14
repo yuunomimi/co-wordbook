@@ -1,0 +1,95 @@
+.modal {
+  width: 500px;
+
+  background: var(--color-bg1);
+  border-radius: var(--radius-lg);
+
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+
+  border: none;
+  background: none;
+
+  font-size: 28px;
+  cursor: pointer;
+
+  color: var(--color-text2);
+}
+
+.update-word-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px;
+}
+
+.update-word-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--color-text1);
+  margin-bottom: 4px;
+}
+
+.update-word-error {
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--color-error);
+  font-size: 14px
+}
+
+.update-word-field {
+  display: grid;
+  gap: 6px;
+}
+
+.update-word-field span {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text2);
+}
+
+.update-word-field input, .update-word-field textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--color-text3);
+  border-radius: var(--radius-md);
+  background: var(--color-bg1);
+  color: var(--color-text1);
+  outline: none;
+}
+
+.update-word-field textarea {
+  resize: none;
+  min-height: 100px;
+}
+
+.update-word-field input::placeholder, .update-word-field textarea::placeholder {
+  color: var(--color-text3);
+  font-size: 14px;
+}
+
+.update-word-field input:focus, .update-word-field textarea:focus {
+  border-color: var(--color-accent);
+}
+
+.update-word-submit {
+  margin-top: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: var(--color-bg1);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.update-word-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
