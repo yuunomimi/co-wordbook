@@ -37,7 +37,7 @@ export const getCollaborators = async (req: Request, res: Response): Promise<voi
         res.status(200).json(result.rows);
     } catch (error) {
         console.error('Error fetching collaborators:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : String(error) });
     }
 };
 
@@ -160,6 +160,9 @@ export const removeCollaborator = async (req: Request, res: Response): Promise<v
         res.status(200).json({ message: 'Collaborator removed successfully' });
     } catch (error) {
         console.error('Error removing collaborator:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ 
+        message: 'Internal server error',
+        error: error instanceof Error ? error.message : String(error)
+    });
     }
 };
