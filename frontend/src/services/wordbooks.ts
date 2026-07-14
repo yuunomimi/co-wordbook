@@ -72,3 +72,13 @@ export async function updateWordbook(id: number, wordbook: NewWordbook): Promise
   const updatedWordbook: WordbookResponse = await response.json();
   return updatedWordbook;
 }
+
+export async function deleteWordbook(id: number): Promise<void> {
+  const response = await apiFetch(`/api/wordbooks/${id}`, {
+    method: "DELETE"
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete wordbook with id ${id}`);
+  }
+}

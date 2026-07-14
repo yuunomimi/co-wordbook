@@ -7,9 +7,10 @@ type props = {
   wordbooks: Wordbook[];
   onCreateWordbookClick: () => void;
   onUpdateWordbookClick: (wordbook: Wordbook) => void;
+  onDeleteWordbookClick: (wordbook: Wordbook) => void;
 };
 
-function WordbookList({ wordbooks, onCreateWordbookClick, onUpdateWordbookClick }: props) {
+function WordbookList({ wordbooks, onCreateWordbookClick, onUpdateWordbookClick, onDeleteWordbookClick }: props) {
   return (
     <div className="wordbook-list">
       <button className="wordbook-item create-wordbook-item" onClick={() => onCreateWordbookClick()}>
@@ -21,6 +22,7 @@ function WordbookList({ wordbooks, onCreateWordbookClick, onUpdateWordbookClick 
           key={wordbook.id}
           wordbook={wordbook}
           onUpdateClick={() => onUpdateWordbookClick(wordbook)}
+          onDeleteClick={() => onDeleteWordbookClick(wordbook)}
         />
       ))}
     </div>

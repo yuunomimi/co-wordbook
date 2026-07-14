@@ -12,12 +12,14 @@ import { clearAuthContext, useAuth } from "../contexts/AuthContext";
 import './Home.css';
 import WordbookCreateModal from "../components/WordbookCreateModal";
 import WordbookUpdateModal from "../components/WordbookUpdateModal";
+import WordbookDeleteModal from "../components/WordbookDeleteModal";
 
 function Home() {
   const [wordbooks, setWordbooks] = useState<Wordbook[]>([]);
   const [sortKey, setSortKey] = useState<SortKey>("updated");
   const [isCreateWordbookModalOpen, setIsCreateWordbookModalOpen] = useState(false);
   const [isUpdateWordbookModalOpen, setIsUpdateWordbookModalOpen] = useState(false);
+  const [isDeleteWordbookModalOpen, setIsDeleteWordbookModalOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
   const [targetWordbook, setTargetWordbook] = useState<Wordbook | null>(null);
@@ -87,6 +89,10 @@ function Home() {
           setTargetWordbook(wordbook);
           setIsUpdateWordbookModalOpen(true);
         }}
+        onDeleteWordbookClick={(wordbook) => {
+          setTargetWordbook(wordbook);
+          setIsDeleteWordbookModalOpen(true);
+        }}
       />
 
       {isCreateWordbookModalOpen && (
@@ -107,6 +113,17 @@ function Home() {
             currentWordbook={targetWordbook}
             onClose={() => setIsUpdateWordbookModalOpen(false)}
             onUpdated={loadWordbooks}
+          />
+        </div>
+      )}
+      {isDeleteWordbookModalOpen && (
+        <div className="modal-overlay" onClick={() => {
+          setIsDeleteWordbookModalOpen(false);
+        }}>
+          <WordbookDeleteModal
+            currentWordbook={targetWordbook}
+            onClose={() => setIsDeleteWordbookModalOpen(false)}
+            onDeleted={loadWordbooks}
           />
         </div>
       )}

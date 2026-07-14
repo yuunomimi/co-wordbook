@@ -11,7 +11,7 @@ type WordbookItemProps = {
   onUpdateClick: () => void;
 };
 
-function WordbookItem({ wordbook, onUpdateClick }: WordbookItemProps) {
+function WordbookItem({ wordbook, onUpdateClick, onDeleteClick }: WordbookItemProps & { onDeleteClick: () => void }) {
   const [isMoreOpen, setIsMoreOpen] = useState<boolean>(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -69,6 +69,9 @@ function WordbookItem({ wordbook, onUpdateClick }: WordbookItemProps) {
                 onClick={() => {
                   if (action === "編集") {
                     onUpdateClick();
+                  }
+                  if (action === "削除") {
+                    onDeleteClick();
                   }
                   // Add logic for other actions if needed
                 }}
