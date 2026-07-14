@@ -9,3 +9,9 @@ export type Wordbook = {
   updatedAt: string;
   isPublic: boolean;
 };
+
+export type NewWordbook = {
+  title: string;
+  description: string;
+  themeColor: string;
+};

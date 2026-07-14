@@ -1,4 +1,4 @@
-import type { Wordbook } from "../types/Wordbook";
+import type { NewWordbook } from "../types/Wordbook";
 import { apiFetch } from "./api";
 
 type WordbookResponse = {
@@ -37,4 +37,22 @@ export async function fetchWordbookById(id: number): Promise<WordbookResponse | 
   }
 
   return wordbook;
+}
+
+export async function createWordbook(wordbook: NewWordbook): Promise<WordbookResponse> {
+  const response = await apiFetch(`/api/wordbooks`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(wordbook)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create wordbook`);
+  }
+
+  const createdWordbook: WordbookResponse = await response.json();
+
+  return createdWordbook;
 }

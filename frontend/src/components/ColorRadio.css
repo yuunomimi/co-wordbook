@@ -1,0 +1,37 @@
+.color-picker {
+  margin-left: 4px;
+  display: flex;
+  gap: 12px;
+}
+
+.color-radio input {
+  display: none;
+}
+
+.color-circle {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color);
+  cursor: pointer;
+  border: 3px solid transparent;
+  position: relative;
+}
+
+.color-radio input:checked + .color-circle {
+  border-color: var(--color-bg1);
+}
+
+.color-radio input:checked + .color-circle::after {
+  content: "";
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: 3px solid var(--color-accent);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.1);
+}

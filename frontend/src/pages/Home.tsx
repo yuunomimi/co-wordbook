@@ -20,9 +20,9 @@ function Home() {
   const [searchParams] = useSearchParams();
   const sidebarFilter = (searchParams.get("filter") as SidebarFilter) || "home";
 
-  useEffect(() => {
-    fetchWordbooks()
-      .then(wordbooks => {
+  const loadWordbooks = () => {
+    return fetchWordbooks()
+      .then((wordbooks) => {
         setWordbooks(wordbooks.map((wordbook) => ({
           ...wordbook,
           isMine: wordbook.ownerId === user?.id
@@ -34,6 +34,10 @@ function Home() {
           navigate("/login", { replace: true });
         }
       });
+  };
+
+  useEffect(() => {
+    loadWordbooks();
   }, [navigate]);
 
   const visibleWordbooks = useMemo(() => {
@@ -69,7 +73,7 @@ function Home() {
         <input type="text" placeholder="単語帳を検索" />
       </div>
       <SortMenu className="sort-menu" value={sortKey} onChange={setSortKey} />
-      <WordbookList wordbooks={visibleWordbooks} />
+      <WordbookList wordbooks={visibleWordbooks} onWordbookCreated={loadWordbooks} />
     </div>
   );
 }
