@@ -10,12 +10,17 @@ import { Search } from "lucide-react";
 import { UnauthorizedError } from "../services/api";
 import { clearAuthContext, useAuth } from "../contexts/AuthContext";
 import './Home.css';
+import WordbookCreateModal from "../components/WordbookCreateModal";
+import WordbookUpdateModal from "../components/WordbookUpdateModal";
 
 function Home() {
   const [wordbooks, setWordbooks] = useState<Wordbook[]>([]);
   const [sortKey, setSortKey] = useState<SortKey>("updated");
+  const [isCreateWordbookModalOpen, setIsCreateWordbookModalOpen] = useState(false);
+  const [isUpdateWordbookModalOpen, setIsUpdateWordbookModalOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [targetWordbook, setTargetWordbook] = useState<Wordbook | null>(null);
 
   const [searchParams] = useSearchParams();
   const sidebarFilter = (searchParams.get("filter") as SidebarFilter) || "home";
@@ -72,8 +77,39 @@ function Home() {
         <Search className="search-icon" width={32} height={32} />
         <input type="text" placeholder="単語帳を検索" />
       </div>
+
       <SortMenu className="sort-menu" value={sortKey} onChange={setSortKey} />
-      <WordbookList wordbooks={visibleWordbooks} onWordbookCreated={loadWordbooks} />
+
+      <WordbookList
+        wordbooks={visibleWordbooks}
+        onCreateWordbookClick={() => setIsCreateWordbookModalOpen(true)}
+        onUpdateWordbookClick={(wordbook) => {
+          setTargetWordbook(wordbook);
+          setIsUpdateWordbookModalOpen(true);
+        }}
+      />
+
+      {isCreateWordbookModalOpen && (
+        <div className="modal-overlay" onClick={() => {
+          setIsCreateWordbookModalOpen(false);
+        }}>
+          <WordbookCreateModal
+            onClose={() => setIsCreateWordbookModalOpen(false)}
+            onCreated={loadWordbooks}
+          />
+        </div>
+      )}
+      {isUpdateWordbookModalOpen && (
+        <div className="modal-overlay" onClick={() => {
+          setIsUpdateWordbookModalOpen(false);
+        }}>
+          <WordbookUpdateModal
+            currentWordbook={targetWordbook}
+            onClose={() => setIsUpdateWordbookModalOpen(false)}
+            onUpdated={loadWordbooks}
+          />
+        </div>
+      )}
     </div>
   );
 }

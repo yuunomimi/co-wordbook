@@ -21,14 +21,14 @@
   color: var(--color-text2);
 }
 
-.create-wordbook-form {
+.update-wordbook-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 32px;
 }
 
-.create-wordbook-title {
+.update-wordbook-title {
   text-align: center;
   font-size: 28px;
   font-weight: 900;
@@ -36,18 +36,26 @@
   margin-bottom: 4px;
 }
 
-.create-wordbook-field {
+.update-wordbook-error {
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--color-error);
+  font-size: 14px
+}
+
+.update-wordbook-field {
   display: grid;
   gap: 6px;
 }
 
-.create-wordbook-field span {
+.update-wordbook-field span {
   font-size: 14px;
   font-weight: 700;
   color: var(--color-text2);
 }
 
-.create-wordbook-field input, .create-wordbook-field textarea {
+.update-wordbook-field input, .update-wordbook-field textarea {
   width: 100%;
   padding: 12px 16px;
   border: 1px solid var(--color-text3);
@@ -57,21 +65,21 @@
   outline: none;
 }
 
-.create-wordbook-field textarea {
+.update-wordbook-field textarea {
   resize: none;
   min-height: 100px;
 }
 
-.create-wordbook-field input::placeholder, .create-wordbook-field textarea::placeholder {
+.update-wordbook-field input::placeholder, .update-wordbook-field textarea::placeholder {
   color: var(--color-text3);
   font-size: 14px;
 }
 
-.create-wordbook-field input:focus, .create-wordbook-field textarea:focus {
+.update-wordbook-field input:focus, .update-wordbook-field textarea:focus {
   border-color: var(--color-accent);
 }
 
-.create-wordbook-submit {
+.update-wordbook-submit {
   margin-top: 8px;
   padding: 12px 16px;
   border-radius: var(--radius-md);
@@ -81,7 +89,7 @@
   cursor: pointer;
 }
 
-.create-wordbook-submit:disabled {
+.update-wordbook-submit:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }

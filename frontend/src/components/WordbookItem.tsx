@@ -6,7 +6,12 @@ import { Clock3, Ellipsis } from "lucide-react";
 import "./WordbookItem.css";
 import { useNavigate } from "react-router-dom";
 
-function WordbookItem({ wordbook }: { wordbook: Wordbook }) {
+type WordbookItemProps = {
+  wordbook: Wordbook;
+  onUpdateClick: () => void;
+};
+
+function WordbookItem({ wordbook, onUpdateClick }: WordbookItemProps) {
   const [isMoreOpen, setIsMoreOpen] = useState<boolean>(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -60,7 +65,16 @@ function WordbookItem({ wordbook }: { wordbook: Wordbook }) {
         {isMoreOpen && (
           <ul className="wordbook-item-more-menu" onClick={(event) => event.stopPropagation()}>
             {moreActions.map((action) => (
-              <li key={action}>{action}</li>
+              <li key={action}
+                onClick={() => {
+                  if (action === "編集") {
+                    onUpdateClick();
+                  }
+                  // Add logic for other actions if needed
+                }}
+              >
+                {action}
+              </li>
             ))}
           </ul>
         )}

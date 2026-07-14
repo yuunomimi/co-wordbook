@@ -56,3 +56,19 @@ export async function createWordbook(wordbook: NewWordbook): Promise<WordbookRes
 
   return createdWordbook;
 }
+
+export async function updateWordbook(id: number, wordbook: NewWordbook): Promise<WordbookResponse> {
+  const response = await apiFetch(`/api/wordbooks/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(wordbook)
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to update wordbook with id ${id}`);
+  }
+
+  const updatedWordbook: WordbookResponse = await response.json();
+  return updatedWordbook;
+}
