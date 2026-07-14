@@ -1,0 +1,34 @@
+.word-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: left;
+  padding-bottom: 32px;
+}
+
+.word-item.add-word-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-md);
+  border: 4px dashed var(--color-text3);
+  cursor: pointer;
+  color: var(--color-text3);
+  box-shadow: none;
+  background: var(--color-bg2);
+}
+
+.word-item.add-word-item h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text3);
+}
+
+.word-item.add-word-item:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.word-item.add-word-item:hover h3 {
+  color: var(--color-accent);
+}
