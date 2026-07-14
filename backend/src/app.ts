@@ -38,14 +38,15 @@ const frontendPath = path.join(__dirname, '../../frontend/dist');
 // 2. 静的ファイルの提供を許可
 app.use(express.static(frontendPath));
 
-// デバッグ用のログを出力（Renderのログで確認できます）
-console.log("===============================");
-console.log("__dirname is:", __dirname);
-console.log("frontendPath is:", frontendPath);
-console.log("Does frontendPath exist?:", fs.existsSync(frontendPath));
-console.log("===============================");
+// // デバッグ用のログを出力（Renderのログで確認できます）
+// console.log("===============================");
+// console.log("__dirname is:", __dirname);
+// console.log("frontendPath is:", frontendPath);
+// console.log("Does frontendPath exist?:", fs.existsSync(frontendPath));
+// console.log("===============================");
+
 // 3. APIルート以外のすべてのGETリクエストをフロントエンドの index.html に流す（SPA用）
-app.get('*', (req: Request, res: Response) => {
+app.get(/(.*)/, (req: Request, res: Response) => {
     res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
