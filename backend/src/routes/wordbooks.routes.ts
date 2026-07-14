@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as realController from '../controllers/wordbooks.controller';
 import * as mockController from '../controllers/wordbooks.mock.controller';
+import collaboratorsRoutes from './collaborators.routes';
 import wordsRoutes from './words.routes';
 
 const isMock = process.env.USE_MOCK === 'true' || false; // デフォルトはfalseに設定
@@ -21,4 +22,6 @@ router.patch('/:wbid', updateWordbook);
 router.delete('/:wbid', deleteWordbook);
 
 router.use('/:wbid/words', wordsRoutes);
+
+router.use('/:wbid/users', collaboratorsRoutes);
 export default router;

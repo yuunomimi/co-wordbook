@@ -8,14 +8,14 @@ const { getWords, createWord, getWord, updateWord, deleteWord } = controller;
 
 const router = Router({ mergeParams: true });
 
-// GET /api/words
+// GET /api/wordbooks/:wbid/words
 router.get('/', getWords);
-// POST /api/words
+// POST /api/wordbooks/:wbid/words
 router.post('/', createWord);
-// GET /api/words/:wid
+// GET /api/wordbooks/:wbid/words/:wid
 router.get('/:wid', getWord);
-// PATCH /api/words/:wid
+// PATCH /api/wordbooks/:wbid/words/:wid
 router.patch('/:wid', updateWord);
-// DELETE /api/words/:wid
+// DELETE /api/wordbooks/:wbid/words/:wid
 router.delete('/:wid', deleteWord);
 export default router;

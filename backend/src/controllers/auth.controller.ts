@@ -47,7 +47,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
             // ==========================================
             const isMatch = await bcrypt.compare(password, user.password_hash);
             if (!isMatch) {
-                return res.status(401).json({ message: 'ユーザー名またはパスワードが違います' });
+                return res.status(401).json({ message: '同名のユーザが既に存在するか、ユーザー名またはパスワードが違います' });
             }
         }
 

@@ -1,23 +1,30 @@
 import { Request, Response } from 'express';
 import pool from '../db';
 
-// 単語帳一覧取得 (GET)
+// 単語帳一覧取得 (GET) - 自分がオーナー、またはコラボレーターであるものを取得
 export const getWordbooks = async (req: Request, res: Response): Promise<void> => {
     try {
-        const userId = (req.user as { id: number }).id;
+        // user_id は UUID のため string にキャスト
+        const userId = (req.user as { id: string }).id;
 
         const query = `
             SELECT
-                id, title, description,
-                theme_color AS "themeColor",
-                owner_id AS "ownerId",
-                created_at AS "createdAt",
-                updated_at AS "updatedAt",
-                is_public AS "isPublic",
-                is_shared AS "isShared"
-            FROM wordbooks
-            WHERE owner_id = $1
-            ORDER BY created_at DESC
+                w.id, w.title, w.description,
+                w.theme_color AS "themeColor",
+                w.owner_id AS "ownerId",
+                w.created_at AS "createdAt",
+                w.updated_at AS "updatedAt",
+                w.is_public AS "isPublic",
+                EXISTS (
+                    SELECT 1 FROM collaborators c WHERE c.wordbook_id = w.id
+                ) AS "isShared"
+            FROM wordbooks w
+            WHERE w.owner_id = $1
+               OR EXISTS (
+                   SELECT 1 FROM collaborators c
+                   WHERE c.wordbook_id = w.id AND c.user_id = $1
+               )
+            ORDER BY w.created_at DESC
         `;
         const result = await pool.query(query, [userId]);
 
@@ -32,12 +39,16 @@ export const getWordbooks = async (req: Request, res: Response): Promise<void> =
 export const createWordbook = async (req: Request, res: Response): Promise<void> => {
     try {
         const { title, description, themeColor } = req.body;
-        // const ownerId = 1; // 元のコード
-        const ownerId = (req.user as { id: number })?.id || 1; // req.userが存在すればそれを使う
+        const ownerId = (req.user as { id: string })?.id;
+
+        if (!ownerId) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
 
         const query = `
-            INSERT INTO wordbooks (title, description, theme_color, owner_id, is_public, is_shared)
-            VALUES ($1, $2, $3, $4, $5, $6)
+            INSERT INTO wordbooks (title, description, theme_color, owner_id, is_public)
+            VALUES ($1, $2, $3, $4, $5)
             RETURNING
                 id, title, description,
                 theme_color AS "themeColor",
@@ -45,7 +56,7 @@ export const createWordbook = async (req: Request, res: Response): Promise<void>
                 created_at AS "createdAt",
                 updated_at AS "updatedAt",
                 is_public AS "isPublic",
-                is_shared AS "isShared"
+                false AS "isShared"
         `;
 
         const values = [
@@ -53,8 +64,7 @@ export const createWordbook = async (req: Request, res: Response): Promise<void>
             description,
             themeColor || '#6c757d',
             ownerId,
-            false,
-            false
+            false // is_public
         ];
 
         const result = await pool.query(query, values);
@@ -65,25 +75,35 @@ export const createWordbook = async (req: Request, res: Response): Promise<void>
     }
 };
 
-// 単語帳取得 (GET)
+// 単語帳取得 (GET) - 自分がオーナー、またはコラボレーターである場合のみ取得可能
 export const getWordbook = async (req: Request, res: Response): Promise<void> => {
     try {
         const { wbid } = req.params;
         const wordbookId = parseInt(Array.isArray(wbid) ? wbid[0] : wbid, 10);
+        const userId = (req.user as { id: string }).id;
 
         const query = `
             SELECT 
-                id, title, description,
-                theme_color AS "themeColor",
-                owner_id AS "ownerId",
-                created_at AS "createdAt",
-                updated_at AS "updatedAt",
-                is_public AS "isPublic",
-                is_shared AS "isShared"
-            FROM wordbooks
-            WHERE id = $1
+                w.id, w.title, w.description,
+                w.theme_color AS "themeColor",
+                w.owner_id AS "ownerId",
+                w.created_at AS "createdAt",
+                w.updated_at AS "updatedAt",
+                w.is_public AS "isPublic",
+                EXISTS (
+                    SELECT 1 FROM collaborators c WHERE c.wordbook_id = w.id
+                ) AS "isShared"
+            FROM wordbooks w
+            WHERE w.id = $1
+              AND (
+                w.owner_id = $2
+                OR EXISTS (
+                    SELECT 1 FROM collaborators c 
+                    WHERE c.wordbook_id = w.id AND c.user_id = $2
+                )
+              )
         `;
-        const result = await pool.query(query, [wordbookId]);
+        const result = await pool.query(query, [wordbookId, userId]);
 
         if (result.rowCount === 0) {
             res.status(404).json({ message: 'Wordbook not found' });
@@ -96,44 +116,52 @@ export const getWordbook = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
-// 単語帳の更新（PATCH）
+// 単語帳の更新（PATCH）- オーナー、またはコラボレーターのみ更新可能
 export const updateWordbook = async (req: Request, res: Response): Promise<void> => {
     try {
         const { wbid } = req.params;
         const wordbookId = parseInt(Array.isArray(wbid) ? wbid[0] : wbid, 10);
-        const { title, description, themeColor, isPublic, isShared } = req.body;
+        // isShared は collaborators への登録/削除API側で管理するため更新対象から除外
+        const { title, description, themeColor, isPublic } = req.body;
+        const userId = (req.user as { id: string }).id;
 
-        // COALESCE を使うことで、送られてこなかった値(null)は更新せず、既存の値を維持します
         const query = `
-            UPDATE wordbooks
+            UPDATE wordbooks w
             SET 
-                title = COALESCE($1, title),
-                description = COALESCE($2, description),
-                theme_color = COALESCE($3, theme_color),
-                is_public = COALESCE($4, is_public),
-                is_shared = COALESCE($5, is_shared),
+                title = COALESCE($1, w.title),
+                description = COALESCE($2, w.description),
+                theme_color = COALESCE($3, w.theme_color),
+                is_public = COALESCE($4, w.is_public),
                 updated_at = NOW()
-            WHERE id = $6
+            WHERE w.id = $5
+              AND (
+                w.owner_id = $6
+                OR EXISTS (
+                    SELECT 1 FROM collaborators c 
+                    WHERE c.wordbook_id = w.id AND c.user_id = $6
+                )
+              )
             RETURNING 
-                id, title, description, 
-                theme_color AS "themeColor", 
-                owner_id AS "ownerId", 
-                created_at AS "createdAt", 
-                updated_at AS "updatedAt", 
-                is_public AS "isPublic", 
-                is_shared AS "isShared"
+                w.id, w.title, w.description, 
+                w.theme_color AS "themeColor", 
+                w.owner_id AS "ownerId", 
+                w.created_at AS "createdAt", 
+                w.updated_at AS "updatedAt", 
+                w.is_public AS "isPublic",
+                EXISTS (
+                    SELECT 1 FROM collaborators c WHERE c.wordbook_id = w.id
+                ) AS "isShared"
         `;
 
-        // undefined の場合は null に変換し、SQLの COALESCE が正しく機能するようにします
         const values = [
             title !== undefined ? title : null,
             description !== undefined ? description : null,
             themeColor !== undefined ? themeColor : null,
             isPublic !== undefined ? isPublic : null,
-            isShared !== undefined ? isShared : null,
-            wordbookId
+            wordbookId,
+            userId // $6
         ];
-
+        
         const result = await pool.query(query, values);
 
         if (result.rowCount === 0) {
@@ -148,26 +176,25 @@ export const updateWordbook = async (req: Request, res: Response): Promise<void>
     }
 };
 
-// 単語帳の削除（DELETE）
+// 単語帳の削除（DELETE）- 【重要】オーナーのみ削除可能
 export const deleteWordbook = async (req: Request, res: Response): Promise<void> => {
     try {
         const { wbid } = req.params;
         const wordbookId = parseInt(Array.isArray(wbid) ? wbid[0] : wbid, 10);
+        const userId = (req.user as { id: string }).id;
 
         const query = `
-            DELETE FROM wordbooks 
-            WHERE id = $1 
+            DELETE FROM wordbooks
+            WHERE id = $1 AND owner_id = $2
             RETURNING id, title
         `;
-        const result = await pool.query(query, [wordbookId]);
+        const result = await pool.query(query, [wordbookId, userId]);
 
         if (result.rowCount === 0) {
             res.status(404).json({ message: 'Wordbook not found' });
             return;
         }
 
-        // ※元のコードでは削除直後に splice された配列の同じインデックス（mockWB[wordbookIndex]）を
-        // 参照しようとするバグがありましたが、RETURNING句を使うことで安全に解決しています。
         res.status(200).json({
             id: result.rows[0].id,
             title: result.rows[0].title
