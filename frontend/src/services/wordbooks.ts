@@ -1,5 +1,5 @@
 import type { Wordbook } from "../types/Wordbook";
-const API_URL = import.meta.env.VITE_API_URL;
+import { apiFetch } from "./api";
 
 type WordbookResponse = {
   id: number;
@@ -12,30 +12,29 @@ type WordbookResponse = {
   isPublic: boolean;
 };
 
-export async function fetchWordbooks(): Promise<Wordbook[]> {
-  const response = await fetch(`${API_URL}/api/wordbooks`);
+export async function fetchWordbooks(): Promise<WordbookResponse[]> {
+  const response = await apiFetch(`/api/wordbooks`);
+
   if (!response.ok) {
-    throw new Error("Failed to fetch wordbooks");
+    throw new Error(`Failed to fetch wordbooks`);
   }
   const data: WordbookResponse[] = await response.json();
 
-  return data.map((wordbook) => ({
-    ...wordbook,
-    isMine: wordbook.ownerId == 1, // Replace 1 with the actual user ID
-  }));
+  return data;
 }
 
-export async function fetchWordbookById(id: number): Promise<Wordbook | null> {
-  const response = await fetch(`${API_URL}/api/wordbooks/${id}`);
+export async function fetchWordbookById(id: number): Promise<WordbookResponse | null> {
+  const response = await apiFetch(`/api/wordbooks/${id}`);
+
   if (!response.ok) {
     throw new Error(`Failed to fetch wordbook with id ${id}`);
   }
+
   const wordbook: WordbookResponse | undefined = await response.json();
+
   if (!wordbook) {
     throw new Error(`Wordbook with id ${id} not found`);
   }
-  return {
-    ...wordbook,
-    isMine: wordbook.ownerId == 1, // Replace 1 with the actual user ID
-  };
+
+  return wordbook;
 }

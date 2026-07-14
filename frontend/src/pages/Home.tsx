@@ -5,20 +5,36 @@ import SortMenu from "../components/SortMenu";
 import type { SortKey } from "../components/SortMenu";
 import { useState, useEffect, useMemo } from "react";
 import { type SidebarFilter } from "../components/Sidebar";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
+import { UnauthorizedError } from "../services/api";
+import { clearAuthContext, useAuth } from "../contexts/AuthContext";
 import './Home.css';
 
 function Home() {
   const [wordbooks, setWordbooks] = useState<Wordbook[]>([]);
   const [sortKey, setSortKey] = useState<SortKey>("updated");
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [searchParams] = useSearchParams();
   const sidebarFilter = (searchParams.get("filter") as SidebarFilter) || "home";
 
   useEffect(() => {
-    fetchWordbooks().then(setWordbooks);
-  }, []);
+    fetchWordbooks()
+      .then(wordbooks => {
+        setWordbooks(wordbooks.map((wordbook) => ({
+          ...wordbook,
+          isMine: wordbook.ownerId === user?.id
+        })));
+      })
+      .catch((error: unknown) => {
+        if (error instanceof UnauthorizedError) {
+          clearAuthContext();
+          navigate("/login", { replace: true });
+        }
+      });
+  }, [navigate]);
 
   const visibleWordbooks = useMemo(() => {
     const filteredWordbooks = wordbooks.filter((wordbook) => {
@@ -27,7 +43,7 @@ function Home() {
       }
 
       if (sidebarFilter === "shared") {
-        return !wordbook.isMine && wordbook.isPublic;
+        return !wordbook.isMine;
       }
 
       return true;
