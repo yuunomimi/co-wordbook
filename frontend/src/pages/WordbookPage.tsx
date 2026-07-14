@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import type { Wordbook } from "../types/Wordbook"
 import type { Word } from "../types/Word"
@@ -7,16 +8,45 @@ import { fetchWordsByWordbookId } from "../services/words"
 import './WordbookPage.css'
 import WordList from "../components/WordList"
 import { Globe, Lock } from "lucide-react"
+import { UnauthorizedError } from "../services/api"
+import { clearAuthContext } from "../contexts/AuthContext"
+import { useAuth } from "../contexts/AuthContext"
 
 function WordbookPage() {
   const { id } = useParams()
+  const navigate = useNavigate();
   const [wordbook, setWordbook] = useState<Wordbook | null>(null)
   const [words, setWords] = useState<Word[]>([])
+  const { user } = useAuth();
 
   useEffect(() => {
-    fetchWordbookById(Number(id)).then(setWordbook);
-    fetchWordsByWordbookId(Number(id)).then(setWords);
-  }, [])
+    fetchWordbookById(Number(id))
+      .then(wordbook => {
+        if (wordbook) {
+          setWordbook({
+            ...wordbook,
+            isMine: wordbook.ownerId === user?.id
+          });
+        } else {
+          setWordbook(null);
+        }
+      })
+      .catch((error: unknown) => {
+        if (error instanceof UnauthorizedError) {
+          clearAuthContext();
+          navigate("/login", { replace: true });
+        }
+      });
+
+    fetchWordsByWordbookId(Number(id))
+      .then(setWords)
+      .catch((error: unknown) => {
+        if (error instanceof UnauthorizedError) {
+          clearAuthContext();
+          navigate("/login", { replace: true });
+        }
+      });
+  }, [id, navigate])
 
   return (
     <main className="wordbook-page">
