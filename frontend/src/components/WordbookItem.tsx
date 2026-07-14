@@ -25,10 +25,10 @@ function WordbookItem({ wordbook }: { wordbook: Wordbook }) {
     };
   }, []);
 
-  const moreActions = ["編集", "共有", "削除"];
+  const moreActions = ["編集", "削除"];
 
   return (
-    <div className="wordbook-item" 
+    <div className="wordbook-item"
       onClick={() => navigate(`/wordbooks/${wordbook.id}`)}>
       <CardBackground className="wordbook-item-bg" color={wordbook.themeColor} />
       <CardRing className="wordbook-item-ring" />
