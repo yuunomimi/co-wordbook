@@ -1,13 +1,14 @@
-import "./WordbookCreateModal.css";
+import "./WordbookUpdateModal.css";
 import { X } from "lucide-react";
 import ColorRadio from "./ColorRadio";
 import { useState, type SubmitEvent } from "react";
-import { createWordbook } from "../services/wordbooks";
-import type { NewWordbook } from "../types/Wordbook";
+import { updateWordbook } from "../services/wordbooks";
+import type { Wordbook, NewWordbook } from "../types/Wordbook";
 
 type Props = {
+  currentWordbook: Wordbook | null;
   onClose: () => void;
-  onCreated: () => Promise<void> | void;
+  onUpdated: () => Promise<void> | void;
 };
 
 const colors = [
@@ -21,15 +22,20 @@ const colors = [
   "#D8C4A5", // パステルベージュ
 ];
 
-function WordbookCreateModal({ onClose, onCreated }: Props) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [themeColor, setThemeColor] = useState(colors[0]);
+function WordbookUpdateModal({ currentWordbook, onClose, onUpdated }: Props) {
+  if (!currentWordbook) {
+    return null; // currentWordbookがnullの場合は何も表示しない
+  }
+  const [title, setTitle] = useState(currentWordbook.title);
+  const [description, setDescription] = useState(currentWordbook.description);
+  const [themeColor, setThemeColor] = useState(currentWordbook.themeColor);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage("");
 
     const newWordbook: NewWordbook = {
       title,
@@ -38,11 +44,12 @@ function WordbookCreateModal({ onClose, onCreated }: Props) {
     };
 
     try {
-      await createWordbook(newWordbook);
-      await onCreated();
+      await updateWordbook(currentWordbook!.id, newWordbook);
+      await onUpdated();
       onClose();
     } catch (error) {
-      console.error("Error creating wordbook:", error);
+      setErrorMessage("単語帳の更新に失敗しました。再度お試しください。");
+      console.error("Error updating wordbook:", error);
     } finally {
       setIsSubmitting(false);
     }
@@ -61,9 +68,12 @@ function WordbookCreateModal({ onClose, onCreated }: Props) {
         <X width={24} height={24} />
       </button>
 
-      <form className="create-wordbook-form" onSubmit={handleSubmit}>
-        <h1 className="create-wordbook-title">単語帳を作成</h1>
-        <label className="create-wordbook-field">
+      <form className="update-wordbook-form" onSubmit={handleSubmit}>
+        <h1 className="update-wordbook-title">単語帳を更新</h1>
+
+        {errorMessage && <p className="update-wordbook-error">{errorMessage}</p>}
+
+        <label className="update-wordbook-field">
           <span>単語帳名</span>
           <input
             placeholder="単語帳名"
@@ -72,7 +82,7 @@ function WordbookCreateModal({ onClose, onCreated }: Props) {
             required
           />
         </label>
-        <label className="create-wordbook-field">
+        <label className="update-wordbook-field">
           <span>説明</span>
           <textarea
             placeholder="説明"
@@ -80,16 +90,16 @@ function WordbookCreateModal({ onClose, onCreated }: Props) {
             onChange={(e) => setDescription(e.target.value)}
           />
         </label>
-        <label className="create-wordbook-field">
+        <label className="update-wordbook-field">
           <span>テーマカラー</span>
           <ColorRadio colors={colors} value={themeColor} onColorChange={setThemeColor} />
         </label>
-        <button className="create-wordbook-submit" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "作成中..." : "作成"}
+        <button className="update-wordbook-submit" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "更新中..." : "更新"}
         </button>
       </form>
     </div>
   );
 }
 
-export default WordbookCreateModal;
+export default WordbookUpdateModal;

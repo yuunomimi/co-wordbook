@@ -1,4 +1,4 @@
-import { Globe, House, LogOut, SwatchBook, UserCog, Users } from "lucide-react";
+import { Globe, House, LogOut, SwatchBook, UserCog } from "lucide-react";
 import "./Sidebar.css";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
