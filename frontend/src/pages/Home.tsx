@@ -50,11 +50,11 @@ function Home() {
   const visibleWordbooks = useMemo(() => {
     const filteredWordbooks = wordbooks.filter((wordbook) => {
       if (sidebarFilter === "my") {
-        return wordbook.isMine;
+        return wordbook.ownerId === user?.id;
       }
 
       if (sidebarFilter === "shared") {
-        return !wordbook.isMine;
+        return wordbook.ownerId !== user?.id;
       }
 
       return true;
