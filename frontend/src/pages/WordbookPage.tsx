@@ -9,7 +9,6 @@ import './WordbookPage.css'
 import WordList from "../components/WordList"
 import { Globe, Lock } from "lucide-react"
 import { UnauthorizedError } from "../services/api"
-import { clearAuthContext } from "../contexts/AuthContext"
 import { useAuth } from "../contexts/AuthContext"
 import WordAddModal from "../components/WordAddModal"
 import WordUpdateModal from "../components/WordUpdateModal"
@@ -25,7 +24,7 @@ function WordbookPage() {
   const navigate = useNavigate();
   const [wordbook, setWordbook] = useState<Wordbook | null | undefined>(null)
   const [words, setWords] = useState<Word[]>([])
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
 
   const [targetWord, setTargetWord] = useState<Word | null>(null);
 
@@ -46,7 +45,7 @@ function WordbookPage() {
       .then(setWords)
       .catch((error: unknown) => {
         if (error instanceof UnauthorizedError) {
-          clearAuthContext();
+          setUser(null);
           navigate("/login", { replace: true });
         }
       });
@@ -57,7 +56,7 @@ function WordbookPage() {
       .then(setUsers)
       .catch((error: unknown) => {
         if (error instanceof UnauthorizedError) {
-          clearAuthContext();
+          setUser(null);
           navigate("/login", { replace: true });
         }
       });
@@ -79,7 +78,7 @@ function WordbookPage() {
         setWordbook(undefined);
 
         if (error instanceof UnauthorizedError) {
-          clearAuthContext();
+          setUser(null);
           navigate("/login", { replace: true });
         }
       });

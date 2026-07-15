@@ -39,11 +39,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-export const clearAuthContext = () => {
-  const context = useContext(AuthContext);
-  if (context === null) {
-    throw new Error("clearAuthContext must be used within an AuthProvider");
-  }
-  context.setUser(null);
-};
