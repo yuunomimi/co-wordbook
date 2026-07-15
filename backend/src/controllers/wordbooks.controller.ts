@@ -68,7 +68,15 @@ export const createWordbook = async (req: Request, res: Response): Promise<void>
         ];
 
         const result = await pool.query(query, values);
-        res.status(201).json(result.rows[0]);
+        const newWordbook = result.rows[0];
+
+        // オーナーを collaborators テーブルにも追加する
+        await pool.query(`
+            INSERT INTO collaborators (wordbook_id, user_id)
+            VALUES ($1, $2)
+        `, [newWordbook.id, ownerId]);
+
+        res.status(201).json(newWordbook);
     } catch (error) {
         console.error('Error creating wordbook:', error);
         res.status(500).json({ message: 'Internal server error' });
