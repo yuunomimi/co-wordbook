@@ -22,6 +22,7 @@ function WordAddModal({ currentWordbook, onClose, onAdded }: Props) {
     const newWord: NewWord = {
       word,
       meaning,
+      memorable: false, // 新しい単語はデフォルトで記憶済みではない
     };
 
     try {

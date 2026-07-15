@@ -8,6 +8,7 @@ export type Wordbook = {
   createdAt: string;
   updatedAt: string;
   isPublic: boolean;
+  isShared: boolean;
 };
 
 export type NewWordbook = {

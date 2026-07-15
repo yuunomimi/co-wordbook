@@ -1,0 +1,84 @@
+.user-list {
+  position: relative;
+  display: inline-block;
+}
+
+.user-list-button {
+  padding: 4px 12px;
+  cursor: pointer;
+  background: var(--color-bg1);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-text3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: var(--radius-full);
+  color: var(--color-text1);
+  font-weight: 700;
+}
+
+.user-list-button:hover {
+  background: var(--color-bg1-selected);
+}
+
+.user-list-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+
+  width: 220px;
+  max-height: 280px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 8px;
+
+  list-style: none;
+  background: var(--color-bg1);
+  border: 1px solid var(--color-text3);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 10;
+}
+
+.user-list-item,
+.user-list-empty {
+  padding: 6px 12px;
+  border-radius: calc(var(--radius-md) - 4px);
+  color: var(--color-text1);
+  font-weight: 700;
+}
+
+.user-list-actions {
+  padding-top: 4px;
+}
+
+.user-list-item {
+  background: transparent;
+}
+
+.user-list-item:hover {
+  background: var(--color-bg1-selected);
+}
+
+.user-list-empty {
+  color: var(--color-text2);
+}
+
+.user-list-add-button {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px dashed var(--color-text3);
+  border-radius: calc(var(--radius-md) - 4px);
+  background: transparent;
+  color: var(--color-text1);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.user-list-add-button:hover {
+  background: var(--color-bg1-selected);
+}

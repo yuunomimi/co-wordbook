@@ -14,6 +14,10 @@
   position: relative;
 }
 
+.word-item.memorable {
+  border-color: var(--color-accent);
+}
+
 .word-item:hover {
   transform: scale(1.02);
 }
@@ -22,6 +26,28 @@
   font-size: 24px;
   font-weight: 700;
   color: var(--color-text1);
+}
+
+.word-item-memorable {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text2);
+  border-radius: var(--radius-full);
+}
+
+.word-item-memorable:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.word-item-memorable.memorable {
+  color: var(--color-accent);
 }
 
 .word-item-more-wrap {
