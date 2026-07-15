@@ -41,7 +41,7 @@ function WordbookItem({ wordbook, onUpdateClick, onDeleteClick }: WordbookItemPr
       <CardRing className="wordbook-item-ring" />
       <div className="wordbook-item-content">
         <h3>{wordbook.title}</h3>
-        <p>作成者：{wordbook.isMine ? "自分" : "他のユーザー"}</p>
+        <p>作成者：{user?.id === wordbook.ownerId ? "自分" : "他のユーザー"}</p>
         <p>
           <Clock3 width={16} height={16} />
           {new Date(wordbook.updatedAt).toLocaleDateString("ja-JP", {
