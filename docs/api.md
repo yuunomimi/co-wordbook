@@ -17,7 +17,7 @@ Response
 
 ```json
 {
-  "id": "mojiretsu",
+  "id": uuid,
   "username": "Taro"
 }
 ```
@@ -29,7 +29,7 @@ Response
 
 ```json
 {
-  "id": "mojiretsu",
+  "id": uuid,
   "username": "Taro"
 }
 ```
@@ -40,7 +40,7 @@ GET /api/auth/me
 
 ```json
 {
-  "id": "mojiretsu",
+  "id": uuid,
   "username": "Taro"
 }
 ```
@@ -60,14 +60,13 @@ Response
     "title": "Japanese-English",
     "description": "和英単語帳",
     "themeColor": "#DDDD55",
-    "ownerId": 3,
+    "ownerId": uuid,
     "createdAt": "2026-06-27T11:35:42.123Z",
     "updatedAt": "2026-06-27T11:35:42.123Z",
     "isPublic": false,
     "isShared": false
   }
 ]
-//isSharedはwordbooksDBに格納しない
 ```
 
 ## 単語帳作成
@@ -92,7 +91,7 @@ Response
   "title": "TOEIC",
   "description": "トーイック",
   "themeColor": "#00AAAA",
-  "ownerId": 1,
+  "ownerId": uuid,
   "createdAt": "2026-06-27T11:40:00.000Z",
   "updatedAt": "2026-06-27T11:40:00.000Z"
 }
@@ -110,13 +109,12 @@ Response
     "title": "Japanese-English",
     "description": "和英単語帳",
     "themeColor": "#DDDD55",
-    "ownerId": 3,
+    "ownerId": uuid,
     "createdAt": "2026-06-27T11:35:42.123Z",
     "updatedAt": "2026-06-27T11:35:42.123Z",
     "isPublic": false,
     "isShared": false
 }
-//isSharedはwordbooksDBに格納しない
 ```
 
 ## 単語帳更新
@@ -140,7 +138,7 @@ Response
   "title": "TOEIC IP",
   "description": "トーイック",
   "themeColor": "#FFFFFF",
-  "ownerId": 1,
+  "ownerId": uuid,
   "createdAt": "2026-06-27T11:40:00.000Z",
   "updatedAt": "2026-06-27T11:40:00.000Z"
 }
@@ -181,8 +179,6 @@ Response
   }
 ]
 ```
-// memorablesテーブルからユーザID、単語IDで検索し、momorableを取得する
-// それ以外はwordsテーブルから取得
 
 ## 単語の作成
 
@@ -224,8 +220,6 @@ Response
   "memorable": true
 }
 ```
-// memorablesテーブルからユーザID、単語IDで検索し、momorableを取得する
-// それ以外はwordsテーブルから取得
 
 ## 単語の編集
 
@@ -268,8 +262,6 @@ Response
 }
 ```
 
-## 単語帳ユーザー一覧取得
-
 ## 共同編集者一覧取得
 GET    /api/wordbooks/:id/users
 
@@ -288,7 +280,7 @@ Response
 ]
 ```
 
-# 共同編集者追加
+## 共同編集者追加
 
 POST   /api/wordbooks/:id/users
 
@@ -309,7 +301,7 @@ Response
 ```
 
 
-# 共同編集者削除
+## 共同編集者削除
 
 DELETE /api/wordbooks/:id/users/:userId
 
