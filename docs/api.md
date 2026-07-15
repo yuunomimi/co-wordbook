@@ -198,7 +198,6 @@ Request
   "memorable": false
 }
 ```
-//リクエスト時、自動でMemorablesテーブルのMemorable=falseで単語IDとともに追加する
 
 Response
 
@@ -270,7 +269,9 @@ Response
 ```
 
 ## 単語帳ユーザー一覧取得
-GET    /api/wordbooks/:id/collaborators            # 共同編集者一覧取得
+
+## 共同編集者一覧取得
+GET    /api/wordbooks/:id/users
 
 Response
 
@@ -287,7 +288,9 @@ Response
 ]
 ```
 
-POST   /api/wordbooks/:id/collaborators            # 共同編集者追加
+# 共同編集者追加
+
+POST   /api/wordbooks/:id/users
 
 Request
 ```json
@@ -305,7 +308,10 @@ Response
 }
 ```
 
-DELETE /api/wordbooks/:id/collaborators/:userId    # 共同編集者削除
+
+# 共同編集者削除
+
+DELETE /api/wordbooks/:id/users/:userId
 
 ```json
 {
