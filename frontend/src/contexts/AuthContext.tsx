@@ -1,15 +1,16 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import { fetchMe } from "../services/auth";
+import type { User } from "../types/User";
 
 type AuthContextType = {
-  user: { id: number; username: string } | null;
-  setUser: (user: { id: number; username: string } | null) => void;
+  user: User | null;
+  setUser: (user: User | null) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<{ id: number; username: string } | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     async function fetchUser() {
@@ -37,12 +38,4 @@ export const useAuth = () => {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};
-
-export const clearAuthContext = () => {
-  const context = useContext(AuthContext);
-  if (context === null) {
-    throw new Error("clearAuthContext must be used within an AuthProvider");
-  }
-  context.setUser(null);
 };

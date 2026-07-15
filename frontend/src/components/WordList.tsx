@@ -5,12 +5,13 @@ import "./WordList.css";
 
 type WordListProps = {
   words: Word[];
+  wordbookId?: number;
   onAddWordClick: () => void;
   onUpdateWordClick: (word: Word) => void;
   onDeleteWordClick: (word: Word) => void;
 };
 
-function WordList({ words, onAddWordClick, onUpdateWordClick, onDeleteWordClick }: WordListProps) {
+function WordList({ words, wordbookId, onAddWordClick, onUpdateWordClick, onDeleteWordClick }: WordListProps) {
   return (
     <div className="word-list">
       <button className="word-item add-word-item" onClick={onAddWordClick}>
@@ -21,6 +22,7 @@ function WordList({ words, onAddWordClick, onUpdateWordClick, onDeleteWordClick 
         <WordItem
           key={word.id}
           word={word}
+          wordbookId={wordbookId}
           onUpdateClick={() => onUpdateWordClick(word)}
           onDeleteClick={() => onDeleteWordClick(word)}
         />

@@ -8,7 +8,7 @@ import { type SidebarFilter } from "../components/Sidebar";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Search } from "lucide-react";
 import { UnauthorizedError } from "../services/api";
-import { clearAuthContext, useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import './Home.css';
 import WordbookCreateModal from "../components/WordbookCreateModal";
 import WordbookUpdateModal from "../components/WordbookUpdateModal";
@@ -21,7 +21,7 @@ function Home() {
   const [isUpdateWordbookModalOpen, setIsUpdateWordbookModalOpen] = useState(false);
   const [isDeleteWordbookModalOpen, setIsDeleteWordbookModalOpen] = useState(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [targetWordbook, setTargetWordbook] = useState<Wordbook | null>(null);
 
   const [searchParams] = useSearchParams();
@@ -37,7 +37,7 @@ function Home() {
       })
       .catch((error: unknown) => {
         if (error instanceof UnauthorizedError) {
-          clearAuthContext();
+          setUser(null);
           navigate("/login", { replace: true });
         }
       });

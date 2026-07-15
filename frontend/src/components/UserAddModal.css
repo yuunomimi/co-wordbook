@@ -1,0 +1,82 @@
+.modal {
+  width: 500px;
+
+  background: var(--color-bg1);
+  border-radius: var(--radius-lg);
+
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+
+  border: none;
+  background: none;
+
+  font-size: 28px;
+  cursor: pointer;
+
+  color: var(--color-text2);
+}
+
+.add-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px;
+}
+
+.add-user-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--color-text1);
+  margin-bottom: 4px;
+}
+
+.add-user-field {
+  display: grid;
+  gap: 6px;
+}
+
+.add-user-field span {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text2);
+}
+
+.add-user-field input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--color-text3);
+  border-radius: var(--radius-md);
+  background: var(--color-bg1);
+  color: var(--color-text1);
+  outline: none;
+}
+
+.add-user-field input::placeholder {
+  color: var(--color-text3);
+  font-size: 14px;
+}
+
+.add-user-field input:focus {
+  border-color: var(--color-accent);
+}
+
+.add-user-submit {
+  margin-top: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: var(--color-bg1);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.add-user-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

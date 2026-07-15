@@ -10,6 +10,7 @@ type WordbookResponse = {
   createdAt: string;
   updatedAt: string;
   isPublic: boolean;
+  isShared: boolean;
 };
 
 export async function fetchWordbooks(): Promise<WordbookResponse[]> {

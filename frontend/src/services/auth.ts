@@ -1,16 +1,12 @@
 import { apiFetch } from "./api";
+import type { User } from "../types/User";
 
 type LoginRequest = {
   username: string;
   password: string;
 };
 
-type LoginResponse = {
-  id: number;
-  username: string;
-};
-
-export async function login(data: LoginRequest): Promise<LoginResponse> {
+export async function login(data: LoginRequest): Promise<User> {
   const response = await apiFetch(`/api/auth/login`, {
     method: "POST",
     body: JSON.stringify(data),
@@ -33,7 +29,7 @@ export async function logout(): Promise<void> {
   }
 }
 
-export async function fetchMe(): Promise<LoginResponse> {
+export async function fetchMe(): Promise<User> {
   const response = await apiFetch(`/api/auth/me`);
 
   if (!response.ok) {

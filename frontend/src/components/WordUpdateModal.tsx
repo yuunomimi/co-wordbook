@@ -29,6 +29,7 @@ function WordUpdateModal({ currentWordbook, currentWord, onClose, onUpdated }: P
     const newWord: NewWord = {
       word,
       meaning,
+      memorable: currentWord!.memorable, // 既存の単語のmemorable値を保持
     };
 
     try {
