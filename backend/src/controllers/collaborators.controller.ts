@@ -26,7 +26,7 @@ export const getCollaborators = async (req: Request, res: Response): Promise<voi
         }
 
         const query = `
-            SELECT u.id, u.username, u.email
+            SELECT u.id, u.username
             FROM collaborators c
             JOIN users u ON c.user_id = u.id
             WHERE c.wordbook_id = $1
