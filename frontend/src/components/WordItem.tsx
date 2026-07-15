@@ -20,19 +20,25 @@ function WordItem({ word, wordbookId, onUpdateClick, onDeleteClick }: WordItemPr
   const [isMemorable, setIsMemorable] = useState<boolean>(word.memorable);
 
   function handleMemorableClick() {
-    setIsMemorable((prev) => !prev);
+    const nextMemorable = !isMemorable;
+    setIsMemorable(nextMemorable);
+
     if (wordbookId) {
-      toggleMemorable(wordbookId, word)
+      toggleMemorable(wordbookId, word.id, nextMemorable)
         .then((updatedWord) => {
           console.log("Memorable toggled:", updatedWord);
           setIsMemorable(updatedWord.memorable);
         })
         .catch((error) => {
           console.error("Failed to toggle memorable:", error);
-          setIsMemorable(word.memorable);
+          setIsMemorable((prev) => !prev);
         });
     }
   }
+
+  useEffect(() => {
+    setIsMemorable(word.memorable);
+  }, [word.memorable]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {

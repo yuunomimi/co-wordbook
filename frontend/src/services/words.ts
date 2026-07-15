@@ -47,14 +47,14 @@ export async function deleteWord(wordbookId: number, wordId: number): Promise<vo
   }
 }
 
-export async function toggleMemorable(wordbookId: number, word: Word): Promise<Word> {
-  const response = await apiFetch(`/api/wordbooks/${wordbookId}/words/${word.id}`, {
+export async function toggleMemorable(wordbookId: number, wordId: number, memorable: boolean): Promise<Word> {
+  const response = await apiFetch(`/api/wordbooks/${wordbookId}/words/${wordId}`, {
     method: "PATCH",
-    body: JSON.stringify({ memorable: !word.memorable }),
+    body: JSON.stringify({ memorable }),
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to toggle memorable for word ${word.id} in wordbook ${wordbookId}`);
+    throw new Error(`Failed to toggle memorable for word ${wordId} in wordbook ${wordbookId}`);
   }
   return response.json();
 }
