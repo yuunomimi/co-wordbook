@@ -115,7 +115,7 @@ function WordbookPage() {
           </div>
           <div className="wordbook-users">
             <p>作成者： {users.find((u) => u.id === wordbook.ownerId)?.username || "自分"}</p>
-            <UserList users={users} isOwner={isMine}
+            <UserList users={users.filter((u) => u.id !== wordbook.ownerId)} isOwner={isMine}
               onAddUserClick={() => setIsAddUserModalOpen(true)}
               onRemoveUserClick={(user) => {
                 setTargetUser(user);

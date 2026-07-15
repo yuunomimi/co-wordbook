@@ -5,6 +5,7 @@ import CardRing from "./CardRing";
 import { Clock3, Ellipsis } from "lucide-react";
 import "./WordbookItem.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 type WordbookItemProps = {
   wordbook: Wordbook;
@@ -15,6 +16,7 @@ function WordbookItem({ wordbook, onUpdateClick, onDeleteClick }: WordbookItemPr
   const [isMoreOpen, setIsMoreOpen] = useState<boolean>(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -50,38 +52,40 @@ function WordbookItem({ wordbook, onUpdateClick, onDeleteClick }: WordbookItemPr
         </p>
       </div>
 
-      <div className="wordbook-item-more-wrap" ref={moreMenuRef}>
-        <button
-          className="wordbook-item-more"
-          onClick={(event) => {
-            event.stopPropagation();
-            setIsMoreOpen((prev) => !prev);
-          }}
-          aria-label="単語帳メニュー"
-        >
-          <Ellipsis width={24} height={24} />
-        </button>
+      {user?.id === wordbook.ownerId && (
+        <div className="wordbook-item-more-wrap" ref={moreMenuRef}>
+          <button
+            className="wordbook-item-more"
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsMoreOpen((prev) => !prev);
+            }}
+            aria-label="単語帳メニュー"
+          >
+            <Ellipsis width={24} height={24} />
+          </button>
 
-        {isMoreOpen && (
-          <ul className="wordbook-item-more-menu" onClick={(event) => event.stopPropagation()}>
-            {moreActions.map((action) => (
-              <li key={action}
-                onClick={() => {
-                  if (action === "編集") {
-                    onUpdateClick();
-                  }
-                  if (action === "削除") {
-                    onDeleteClick();
-                  }
-                  // Add logic for other actions if needed
-                }}
-              >
-                {action}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+          {isMoreOpen && (
+            <ul className="wordbook-item-more-menu" onClick={(event) => event.stopPropagation()}>
+              {moreActions.map((action) => (
+                <li key={action}
+                  onClick={() => {
+                    if (action === "編集") {
+                      onUpdateClick();
+                    }
+                    if (action === "削除") {
+                      onDeleteClick();
+                    }
+                    // Add logic for other actions if needed
+                  }}
+                >
+                  {action}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
     </div>
   );
 }

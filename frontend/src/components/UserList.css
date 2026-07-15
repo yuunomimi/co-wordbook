@@ -58,10 +58,20 @@
 
 .user-list-item {
   background: transparent;
+  display: flex;
+  justify-content: space-between;
 }
 
-.user-list-item:hover {
+.user-list-remove-button {
+  cursor: pointer;
+  color: var(--color-text2);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.user-list-remove-button:hover {
   background: var(--color-bg1-selected);
+  color: var(--color-error);
 }
 
 .user-list-empty {
