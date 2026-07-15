@@ -1,7 +1,7 @@
 import type { Word } from "../types/Word";
 import "./WordItem.css";
 import { useState, useRef, useEffect } from "react";
-import { Circle, Ellipsis } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 
 type WordItemProps = {
   word: Word;
