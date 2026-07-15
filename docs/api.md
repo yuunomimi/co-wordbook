@@ -170,15 +170,19 @@ Response
   {
     "id": 1,
     "word": "happy",
-    "meaning": "幸せ"
+    "meaning": "幸せ",
+    "memorable": true
   },
   {
     "id": 2,
     "word": "guilty",
-    "meaning": "罪悪、有罪\n対義語はinocent"
+    "meaning": "罪悪、有罪\n対義語はinocent",
+    "memorable": false
   }
 ]
 ```
+// memorablesテーブルからユーザID、単語IDで検索し、momorableを取得する
+// それ以外はwordsテーブルから取得
 
 ## 単語の作成
 
@@ -190,7 +194,8 @@ Request
 {
   "id": 1,
   "word": "happy",
-  "meaning": "幸せ"
+  "meaning": "幸せ",
+  "memorable": false
 }
 ```
 //リクエスト時、自動でMemorablesテーブルのMemorable=falseで単語IDとともに追加する
@@ -201,7 +206,8 @@ Response
 {
   "id": 1,
   "word": "happy",
-  "meaning": "幸せ"
+  "meaning": "幸せ",
+  "memorable": false
 }
 ```
 
@@ -215,9 +221,12 @@ Response
 {
   "id": 1,
   "word": "happy",
-  "meaning": "幸せ"
+  "meaning": "幸せ",
+  "memorable": true
 }
 ```
+// memorablesテーブルからユーザID、単語IDで検索し、momorableを取得する
+// それ以外はwordsテーブルから取得
 
 ## 単語の編集
 
@@ -229,7 +238,8 @@ Request
 {
   "id": 1,
   "word": "happy",
-  "meaning": "幸せ"
+  "meaning": "幸せ",
+  "memorable": true
 }
 ```
 
@@ -239,7 +249,8 @@ Response
 {
   "id": 1,
   "word": "happy",
-  "meaning": "幸せ"
+  "meaning": "幸せ",
+  "memorable": true
 }
 ```
 
@@ -253,7 +264,8 @@ Response
 {
   "id": 1,
   "word": "happy",
-  "meaning": "幸せ"
+  "meaning": "幸せ",
+  "memorable": true
 }
 ```
 
@@ -293,7 +305,7 @@ Response
 }
 ```
 
-DELETE /api/wordbooks/:id/collaborators/:username    # 共同編集者削除
+DELETE /api/wordbooks/:id/collaborators/:userId    # 共同編集者削除
 
 ```json
 {
@@ -301,7 +313,3 @@ DELETE /api/wordbooks/:id/collaborators/:username    # 共同編集者削除
   "name": "Hanako"
 }
 ```
-
-## 覚えているかのBoolean取得
-
-GET /api/wordbooks/:id/words/:id
